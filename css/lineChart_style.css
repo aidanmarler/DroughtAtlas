@@ -1,0 +1,104 @@
+#linegraph_mainPanel {
+  position: absolute;
+  display: inline-block;
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  text-decoration-color: aliceblue;
+  fill: white;
+  accent-color: white;
+}
+
+#linegraph_infoPanel {
+  position: absolute;
+  display: inline-block;
+  background-color: rgb(0, 0, 0);
+  width: 14vw;
+  height: 35vh;
+  left: 2vh;
+  top: 1vh;
+}
+
+#linegraph_infoPanel_static {
+  position: absolute;
+  background-color: rgb(0, 0, 0);
+  width: 94%;
+  height: 47%;
+  left: 3%;
+  top: 2%;
+  font: 12px sans-serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#linegraph_infoPanel_dynamic {
+  position: absolute;
+  background-color: rgb(0, 0, 0);
+  width: 94%;
+  height: 50%;
+  left: 3%;
+  bottom: 2%;
+  font: 12px sans-serif;
+  text-align: left;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#controls {
+  position: absolute;
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  text-decoration-color: aliceblue;
+  fill: white;
+  accent-color: white;
+  top: 58vh;
+  right: 1vh;
+  width: 42vw;
+  height: 55vh;
+  text-align: left;
+}
+
+#referenceLink {
+  position: absolute;
+  display: inline-block;
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  text-decoration-color: aliceblue;
+  fill: white;
+  accent-color: white;
+  width: 90%;
+  right: 5%;
+  bottom: -20vh;
+  padding: 1vh;
+  font: 12px sans-serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#map {
+  position: absolute;
+  height: 55vh;
+  width: 55vw;
+  display: inline-block;
+  top: 58vh;
+}
+
+#mapControls {
+  position: absolute;
+  bottom: 5%;
+  left: 5%
+}
+
+#lineGraphControls {
+  position: absolute;
+  top: 5%;
+  left: 5%
+}
+
+.axisWhite line {
+  stroke: rgb(255, 255, 255);
+}
+
+.axisWhite path {
+  stroke: rgb(255, 255, 255);
+}
+
+.axisWhite text {
+  fill: rgb(255, 255, 255);
+}

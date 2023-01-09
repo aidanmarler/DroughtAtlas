@@ -1,0 +1,121 @@
+
+body {
+  background-color: rgb(57, 52, 48);
+  font: 14px sans-serif;
+  color: azure;
+  font-weight: normal;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+h1 {
+  font: 38px sans-serif;
+  background: rgb(0, 0, 0); 
+  height: 40px;
+  text-align: center;
+  padding: 4px;
+  font-weight: normal;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+h2 {
+  font: 18px sans-serif;
+  color: azure;
+  background: rgb(0, 0, 0); 
+  height: 20px;
+  text-align: center;
+  padding: 1px;
+  font-weight: bold;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+p {
+  background: rgb(0, 0, 0);
+  text-align: center;
+  height: 18px;
+  padding: 4px;
+}
+
+/* unvisited link */
+a:link {
+  color: rgb(172, 252, 255);
+}
+
+/* visited link */
+a:visited {
+  color: rgb(211, 160, 234);
+}
+
+/* mouse over link */
+a:hover {
+  color: rgb(196, 213, 255);
+}
+
+/* selected link */
+a:active {
+  color: rgb(85, 184, 255);
+}
+
+.sequence-control-container {
+  width: 300px;
+  height: 10px;
+  background-color: rgba(150, 150, 150, 0.8);
+  padding: 10px;
+  line-height: 0px;
+  text-align: center;
+  border: solid rgb(38, 38, 38) 1px;
+}
+
+.legend-control-container {
+  width: 200px;
+  height: 30px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  line-height: 45px;
+  text-align: center;
+  border: solid gray 1px;
+}
+
+.range-slider {
+  width: 220px;
+  height: 5px;
+}
+
+
+.step {
+  position: relative;
+  width: 60px;
+  height: 200%;
+  top: -5px;
+}
+
+
+.step img {
+  width: 110%;
+  height: auto;
+  top: -10px;
+}
+
+.leaflet-popup-content p {
+  margin: 0.0em 0;
+  background-color: rgb(255, 255, 255);
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#popupPMDI {
+  font: 16px sans-serif;
+}
+
+#popupCoordinates {
+  font: 12px sans-serif;
+}
+
+#forward {
+  float: right;
+  width: 8%;
+}
+
+
+#reverse {
+  float: left;
+  width: 8%;
+}
