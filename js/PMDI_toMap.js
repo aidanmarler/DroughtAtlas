@@ -28,6 +28,9 @@ function createMap() {
 
     //call getData function
     getData(map);
+
+    var yearHolder = createHeadingContent(2017);
+    updateHeadingContent(yearHolder)
 };
 
 /*
@@ -314,6 +317,8 @@ function createHeadingContent(year) {
 function updateHeadingContent(header) {
     //add formatted attribute to panel content string
     document.getElementById("yearHeader").innerHTML = header;
+    document.getElementById("mapYearLabel").innerHTML = "Map Year: " + header;
+    console.log("Map Year: " + header)
 };
 
 //Step 10: Resize proportional symbols according to new attribute values
