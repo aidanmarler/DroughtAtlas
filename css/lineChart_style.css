@@ -1,16 +1,14 @@
 #linegraph_mainPanel {
   position: absolute;
-  display: inline-block;
   background-color: rgb(0, 0, 0);
-  color: rgb(255, 255, 255);
-  text-decoration-color: aliceblue;
-  fill: white;
-  accent-color: white;
+  width: 98%;
+  height: 38%;
+  right: 1%;
+  top: 1%;
 }
 
 #linegraph_infoPanel {
   position: absolute;
-  display: inline-block;
   background-color: rgb(0, 0, 0);
   width: 14vw;
   height: 35vh;
@@ -45,28 +43,26 @@
   position: absolute;
   background-color: rgb(0, 0, 0);
   color: rgb(255, 255, 255);
-  text-decoration-color: aliceblue;
+  text-decoration-color: rgb(0, 116, 218);
   fill: white;
   accent-color: white;
-  top: 58vh;
-  right: 1vh;
-  width: 42vw;
+  bottom: 3vh;
+  right: 1%;
+  width: 42%;
   height: 55vh;
   text-align: left;
 }
 
 #referenceLink {
   position: absolute;
-  display: inline-block;
   background-color: rgb(0, 0, 0);
   color: rgb(255, 255, 255);
   text-decoration-color: aliceblue;
   fill: white;
   accent-color: white;
-  width: 90%;
-  right: 5%;
-  bottom: -20vh;
-  padding: 1vh;
+  width: 90vw;
+  left: 5vw;
+  bottom: -4vh;
   font: 12px sans-serif;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
@@ -74,9 +70,10 @@
 #map {
   position: absolute;
   height: 55vh;
-  width: 55vw;
+  width: 55%;
   display: inline-block;
-  top: 58vh;
+  bottom: 3vh;
+  left: 1%
 }
 
 #mapControls {

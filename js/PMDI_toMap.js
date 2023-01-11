@@ -10,7 +10,8 @@ function createMap() {
     //create the map
     map = L.map('map', {
         center: [38, -97.5],
-        zoom: 4
+        zoom: 4,
+        keyboard: false
     });
 
     /*
@@ -31,6 +32,10 @@ function createMap() {
 
     var yearHolder = createHeadingContent(2017);
     updateHeadingContent(yearHolder)
+
+    map.on('zoomend', function() {
+        updatePropSymbols(selectedYear);
+    });
 };
 
 /*
@@ -73,7 +78,7 @@ function calcPropRadius(attValue) {
 };
 
 function calcColor(pmdi) {
-    var color = "#FFFFFF"
+    var color = "white"
 
 
     if (pmdi < 1 && pmdi > -1) {
@@ -105,30 +110,37 @@ function calcColor(pmdi) {
 
 
 function calcSize(pmdi) {
-    var size = 1
+    var zoom = map.getZoom();
+    var zoomIndex = 1;
+
+    if (zoom > 4) {
+        zoomIndex = (zoom)/4
+    }
+
+    var size = 1 * zoomIndex
 
     if (pmdi < 1 && pmdi > -1) {
-        size = 2.5
+        size = 2.5 * zoomIndex
     } else if (pmdi >= 1 && pmdi < 2) {
-        size = 3
+        size = 3 * zoomIndex
     } else if (pmdi <= -1 && pmdi > -2) {
-        size = 3
+        size = 3 * zoomIndex
     } else if (pmdi >= 2 && pmdi < 3) {
-        size = 4
+        size = 4 * zoomIndex
     } else if (pmdi <= -2 && pmdi > -3) {
-        size = 4
+        size = 4 * zoomIndex
     } else if (pmdi >= 3 && pmdi < 4) {
-        size = 5
+        size = 5 * zoomIndex
     } else if (pmdi <= -3 && pmdi > -4) {
-        size = 5
+        size = 5 * zoomIndex
     } else if (pmdi >= 4 && pmdi < 6) {
-        size = 6.5
+        size = 6.5 * zoomIndex
     } else if (pmdi <= -4 && pmdi > -6) {
-        size = 6.5
+        size = 6.5 * zoomIndex
     } else if (pmdi >= 6) {
-        size = 9
+        size = 9 * zoomIndex
     } else if (pmdi <= -6) {
-        size = 9
+        size = 9 * zoomIndex
     };
     return size
 }
@@ -151,11 +163,15 @@ function pointToLayer(feature, latlng, year) {
     //create marker options
     var options = {
         fillColor: pointColor,
-        color: "#000",
+        color: "white",
         weight: 0,
         opacity: 1,
         fillOpacity: .9
     };
+
+    if ((latlng.lat == pointIndex[pointInView]["latitude"]) && (latlng.lng == pointIndex[pointInView]["longitude"])) {
+        options.weight = 3
+    }
 
     //For each feature, determine its value for the selected attribute
     //var attValue = Number(feature.properties[attribute]);
@@ -169,16 +185,21 @@ function pointToLayer(feature, latlng, year) {
     //add formatted attribute to panel content string
     var popupContent = createPopupContent(feature, year);
 
+    /*
     //bind the popup to the circle marker    
     layer.bindPopup(popupContent, {
         offset: new L.Point(0, -options.radius)
     });
+    */
+    layer.bindTooltip(popupContent)
+    
 
     layer.on('click', point_clickOn);
 
     function point_clickOn() {
         {
             callNewChartPoint(latlng["lat"], latlng["lng"])
+            updatePropSymbols(selectedYear)
         }
     };
 
@@ -220,6 +241,7 @@ function createSequenceControls(attributes) {
 
             //disable any mouse event listeners for the container
             L.DomEvent.disableClickPropagation(container);
+            
 
             return container;
         }
@@ -268,6 +290,28 @@ function createSequenceControls(attributes) {
 
 };
 
+// Add keyboard input to change year
+document.addEventListener('keydown', function (event) {
+    if (event.keyCode == 37) {
+        if (selectedYear > 0) {
+            year = parseInt(selectedYear) - 1
+            lineGraphNewYear(year)
+            return
+        }
+        lineGraphNewYear(2017)
+        return
+    }
+    else if (event.keyCode == 39) {
+        if (parseInt(selectedYear) < 2017) {
+            year = parseInt(selectedYear) + 1
+            lineGraphNewYear(year)
+            return
+        }
+        lineGraphNewYear(0)
+        return
+    }
+});
+
 // function to set a new year based on typing and submitting a new year
 function inputYear() {
     var inputString = document.getElementById("yearMapInput").value;
@@ -277,7 +321,6 @@ function inputYear() {
         selectedYear = inputString;
         $('.range-slider').val(selectedYear);
         updatePropSymbols(selectedYear);
-
     }
     else {
         alert("Not in range 0-2017")
@@ -296,9 +339,9 @@ function createPopupContent(feature, year) {
     //add formatted attribute to panel content string
     //var year = attribute.split("_")[1];
     var popupContent = "";
-    popupContent += "<p id=popupPMDI>" + year + ":<b> " + feature.properties[year] + "</b></p>";
+    popupContent += feature.properties[year];
     //console.log(popupContent)
-    popupContent += "<p id=popupCoordinates>" + "Latitude:  " + feature.geometry.coordinates[1] + ", Longitude: " + feature.geometry.coordinates[0] + "</p>";
+    //popupContent += "<p id=popupCoordinates>" + "Latitude:  " + feature.geometry.coordinates[1] + ", Longitude: " + feature.geometry.coordinates[0] + "</p>";
 
 
     return popupContent;
@@ -318,7 +361,7 @@ function updateHeadingContent(header) {
     //add formatted attribute to panel content string
     document.getElementById("yearHeader").innerHTML = header;
     document.getElementById("mapYearLabel").innerHTML = "Map Year: " + header;
-    console.log("Map Year: " + header)
+    //console.log("Map Year: " + header)
 };
 
 //Step 10: Resize proportional symbols according to new attribute values
@@ -338,12 +381,19 @@ function updatePropSymbols(year) {
             layer.setStyle({ fillColor: pointColor });
             //layer.setContent(color)
 
+            if ((layer._latlng.lat == pointIndex[pointInView]["latitude"]) && (layer._latlng.lng == pointIndex[pointInView]["longitude"])) {
+                layer.setStyle({ weight: 3 })
+            } else {
+                layer.setStyle({ weight: 0 })
+            }
+
             //add city to popup content string
             var popupContent = createPopupContent(props, year);
 
+            layer.bindTooltip(popupContent)
             //update popup with new content    
-            popup = layer.getPopup();
-            popup.setContent(popupContent).update();
+            //popup = layer.getPopup();
+            //popup.setContent(popupContent).update();
         };
     });
 
@@ -356,6 +406,7 @@ function updatePropSymbols(year) {
 
     // Update Stats
     //calcStatsInRange(complete_dataset, selectedYear, selectedYear);
+    
 
 };
 

@@ -101,9 +101,9 @@ function inputAveragingRange() {
 // Create Panel and define margin widths
 
 // set the dimensions and margins of the graph
-var margin = { top: 30, right: 20, bottom: 50, left: 250 },
-  width = 1245 - margin.left - margin.right,
-  height = 250 - margin.top - margin.bottom;
+var margin = { top: 30, right: 50, bottom: 60, left: 220 },
+  width = $("#linegraph_mainPanel").width() - margin.left - margin.right,
+  height = $("#linegraph_mainPanel").height() - margin.top - margin.bottom;
 
 
 // append the svg object to the body of the page
@@ -112,9 +112,7 @@ var svgHolder = d3.select("#linegraph_mainPanel")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
-  .attr("transform",
-    "translate(" + margin.left + "," + margin.top + ")");
-
+  .attr("transform","translate(" + ((margin.left)-(0)) + "," + margin.top + ")");
 
 //---------------------------------------------------------------
 
@@ -239,7 +237,7 @@ function setInfoPanelStaticContents() {
 
 function setInfoPanelDynamicContents(year, pmdi, mean) {
   var average = Math.round((mean + Number.EPSILON) * 100) / 100
-  var contents = "<br/> Year: " +   "<font size='+0'>" + year + "</font>"
+  var contents = "<br/> Year: " + "<font size='+0'>" + year + "</font>"
   contents += "<br/><br/> PMDI: " + "<font size='+0'>" + pmdi + "</font>"
   contents += "<br/><br/> " + averageRange + " year rolling average: " + "<font size='+0'>" + average + "</font>"
   infoPanel_dynamic.innerHTML = contents;
@@ -335,6 +333,18 @@ function buildLineChart(data) {
       .y(function (d) { return y(d.average) })
     )
 
+  var referenceLine0 = svgHolder
+    .append('g')
+    .append('line')
+    .style("fill", "grey")
+    .attr("stroke", "grey")
+    .attr("stroke-width", 1)
+    .attr("z-index", 0)
+    .style("opacity", .5)
+    .attr("x1", x(yearMin))
+    .attr("x2", x(yearMax))
+    .attr("y1", y(0))
+    .attr("y2", y(0))
 
   // Create the circle that travels along the curve of chart
   var focusMain = svgHolder
@@ -442,11 +452,10 @@ function buildLineChart(data) {
     focusText.style("opacity", 0)
   }
 
-  function click(){
+  function click() {
     lineGraphNewYear(selectedData.year)
-    console.log(selectedData.year)
+    //console.log(selectedData.year)
   }
 
   setInfoPanelStaticContents()
-
 }
