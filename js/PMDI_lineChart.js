@@ -101,7 +101,7 @@ function inputAveragingRange() {
 // Create Panel and define margin widths
 
 // set the dimensions and margins of the graph
-var margin = { top: 30, right: 50, bottom: 60, left: 220 },
+var margin = { top: 30, right: 40, bottom: 60, left: 220 },
   width = $("#linegraph_mainPanel").width() - margin.left - margin.right,
   height = $("#linegraph_mainPanel").height() - margin.top - margin.bottom;
 

@@ -33,7 +33,7 @@ function createMap() {
     var yearHolder = createHeadingContent(2017);
     updateHeadingContent(yearHolder)
 
-    map.on('zoomend', function() {
+    map.on('zoomend', function () {
         updatePropSymbols(selectedYear);
     });
 };
@@ -114,9 +114,8 @@ function calcSize(pmdi) {
     var zoomIndex = 1;
 
     if (zoom > 4) {
-        zoomIndex = (zoom)/4
+        zoomIndex = (zoom * 2) / (7)
     }
-
     var size = 1 * zoomIndex
 
     if (pmdi < 1 && pmdi > -1) {
@@ -192,7 +191,7 @@ function pointToLayer(feature, latlng, year) {
     });
     */
     layer.bindTooltip(popupContent)
-    
+
 
     layer.on('click', point_clickOn);
 
@@ -241,7 +240,7 @@ function createSequenceControls(attributes) {
 
             //disable any mouse event listeners for the container
             L.DomEvent.disableClickPropagation(container);
-            
+
 
             return container;
         }
@@ -359,7 +358,7 @@ function createHeadingContent(year) {
 
 function updateHeadingContent(header) {
     //add formatted attribute to panel content string
-    document.getElementById("yearHeader").innerHTML = header;
+    //document.getElementById("yearHeader").innerHTML = header;
     document.getElementById("mapYearLabel").innerHTML = "Map Year: " + header;
     //console.log("Map Year: " + header)
 };
@@ -406,7 +405,7 @@ function updatePropSymbols(year) {
 
     // Update Stats
     //calcStatsInRange(complete_dataset, selectedYear, selectedYear);
-    
+
 
 };
 
