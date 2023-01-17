@@ -360,6 +360,7 @@ function updateHeadingContent(header) {
     //add formatted attribute to panel content string
     //document.getElementById("yearHeader").innerHTML = header;
     document.getElementById("mapYearLabel").innerHTML = "Map Year: " + header;
+    document.getElementById("mapTitle").innerHTML = "<span>Summer of </span>" + header;
     //console.log("Map Year: " + header)
 };
 

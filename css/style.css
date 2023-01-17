@@ -33,10 +33,7 @@ h2 {
 }
 
 p {
-  background: rgb(0, 0, 0);
   text-align: center;
-  height: 18px;
-  padding: 4px;
 }
 
 /* unvisited link */
@@ -67,6 +64,7 @@ a:active {
   line-height: 0px;
   text-align: center;
   border: solid rgb(38, 38, 38) 1px;
+  border-radius: 3px;
 }
 
 .legend-control-container {

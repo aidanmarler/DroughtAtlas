@@ -16,6 +16,20 @@
 <body>
     <!--<h1 id="heading">PMDI</h1>
     <h2 id="yearHeader">2017</h2>-->
+    <!--Create divs for a help icon and a help window-->
+    <div id="backdrop"></div>
+    <!--link to data-->
+    <div id="referenceLink_div">
+        <!--Create divs for a help icon and a help window-->
+        <div id="helpIcon_main" class = "helpIcon">
+            ?
+        </div>
+        
+        <p id="Title"> <span><em>Interactive</em></span> <b>L</b>iving <b>B</b>lended <b>D</b>rought <b>A</b>tlas
+        </p>
+    </div>
+    <div id="helpWindow_main" class = "helpWindow">
+        </div>
     <!--put your initial page content here-->
     <div id="linegraph_mainPanel">
         <div id="linegraph_graphPanel"></div>
@@ -24,14 +38,17 @@
             <div id="linegraph_infoPanel_dynamic"></div>
         </div>
     </div>
+    <!--Add divs for the map and control panels-->
+    <div id="mapTitle">2017</div>
     <div id="map"></div>
     <div id="controls">
-        <!--Control buttons and inputs-->
+        <!--Map control buttons and inputs-->
         <div id="mapControls">
             <p id="mapYearLabel" style="text-align:left;">Map Year</p>
             <input id="yearMapInput" placeholder="2017" minlength="1" maxlength="4" size="1">
             <button onclick="inputYear()" id="mapYearSubmit">Submit</button>
         </div>
+        <!--Timeseries control buttons and inputs-->
         <div id="lineGraphControls">
             <p style="text-align:left;">Timeseries Map Range</p>
             <input id="yearMinInput" placeholder="0" minlength="1" maxlength="4" size="1">
@@ -42,26 +59,18 @@
             <input id="averagingRangeInput" placeholder="5" minlength="1" maxlength="4" size="1">
             <button onclick="inputAveragingRange()" id="averagingRangeSubmit">Submit</button>
         </div>
-
     </div>
 
     <!-- Load d3.js -->
     <script src="https://d3js.org/d3.v4.js"></script>
-
-
-
 
     <!--put your external script links here-->
     <script type="text/javascript" src="lib/leaflet.js"></script>
     <script type="text/javascript" src="lib/jquery-3.6.1.js"></script>
     <script type="text/javascript" src="js/PMDI_toMap.js"></script>
     <script type="text/javascript" src="js/PMDI_lineChart.js"></script>
+    <script type="text/javascript" src="js/helpPrompt.js"></script>
 
-    <!--link to data-->
-    <p id="referenceLink"> This uses data from NOAA's libary of paleoclimatic data.
-        <a href="https://www.ncei.noaa.gov/products/paleoclimatology/drought-variability" target="_blank"> See here.
-        </a>
-    </p>
 
 </body>
 
