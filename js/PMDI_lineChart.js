@@ -160,6 +160,7 @@ function callNewChartTimeRange(min, max) {
   yearMin = min;
   yearMax = max;
   buildLineChart(lbda_csv);
+  setLinegraphTitle();
 }
 
 // set new range of years to graph
@@ -170,6 +171,18 @@ function callNewChartRollingAverage(average) {
   averageRange = average;
   buildLineChart(lbda_csv);
 }
+
+function setLinegraphTitle() {
+  
+  //add formatted attribute to panel content string
+  let titleContent = "<span>Summer PMDI <b>" + yearMin+ " - " + yearMax+ "</b></span>";
+
+  let titleDiv = d3.select("#graphLabel_title")
+  
+  titleDiv.html(titleContent)
+ 
+  return;
+};
 //---------------------------------------------------------------
 
 // Calculate AVERAGE PMDI over X years

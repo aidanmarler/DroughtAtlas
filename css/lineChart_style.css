@@ -20,7 +20,7 @@
   border-radius: 18px;
   outline: #000000 solid 3px;
   outline-offset: -1px;
-  
+
 }
 
 #controls {
@@ -74,11 +74,12 @@
   color: black;
   font: 15px sans-serif;
   font-weight: Bold;
-  line-height:87%;
+  line-height: 87%;
   z-index: 9999;
   border-radius: 18px;
   cursor: pointer;
-  user-select: none; /* Standard */
+  user-select: none;
+  /* Standard */
 }
 
 #helpIcon_main {
@@ -90,25 +91,32 @@
   position: absolute;
   text-align: Left;
   width: 86.1%;
-  height: 88.1%;
+  height: 88.6%;
   top: 1.8%;
   left: 1.8%;
   font: 15px sans-serif;
   z-index: -2;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   border-radius: 15px;
-  padding:5%;
-  padding-top:2%;
-  padding-bottom:2%;
+  padding: 5%;
+  padding-top: 2%;
+  padding-bottom: 2%;
 }
 
-span{
+span {
   font-size: 83%;
 }
 
-span em{
+span em {
   color: #fff9ce;
 }
+
+
+span b {
+  font-size: 150%;
+  color: white;
+}
+
 
 .helpWindow {
   background-color: rgba(29, 28, 28, 0.811);
@@ -204,6 +212,40 @@ span em{
   top: 0%;
 }
 
+#graphLabel_title {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  right: 0%;
+  top: 2%;
+  letter-spacing: 0.1em;
+  font: 15px sans-serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: lightgray;
+}
+
+#graphLabel_xAxis {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  right: 0%;
+  bottom: 10%;
+  letter-spacing: 0.15em;
+  font: 11px sans-serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: lightgray;
+}
+
+#graphLabel_yAxis {
+  position: absolute;
+  left: 0%;
+  top: 40%;
+  transform: rotate(-90deg);
+  letter-spacing: 0.2em;
+  font: 10px sans-serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: lightgray;
+}
 
 /* Color def for timeseries lines colors*/
 
