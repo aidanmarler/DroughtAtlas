@@ -19,6 +19,7 @@ let averageData = [];
 let lbda_csv;
 let pointIndex;
 
+
 // Store PMDI csv
 function getLBDA() {
   d3.csv("data/LBDA_main.csv", function (data) {
@@ -31,10 +32,34 @@ function getPointIndex() {
     pointIndex = data
   })
 }
+
+
+async function data(pathToCsv) {
+  return await d3.csv(pathToCsv, function (data) {
+    console.log("working...")
+    return data
+  })
+};
+
+async function init() {
+  let temp_pointIndex = await data('data/LBDA_main.csv');
+  console.log("done1")
+  let temp_lbda_csv = await data('data/LBDA_pointIndex.csv');
+  console.log("done2")
+  //buildLineChart(lbda_csv);
+  // this should work now assuming you are using d3 function correctly as i'm not aware of d3 functions myself
+  console.log(temp_pointIndex)[get]
+}
+
+//init()
+
+
 // Call these funtions, wait, and then build line chart when done
 getLBDA()
 getPointIndex()
-setTimeout(() => buildLineChart(lbda_csv), 300);
+setTimeout(() => buildLineChart(lbda_csv), 500);
+//setTimeout(() => console.log(pointIndex), 00);
+
 //---------------------------------------------------------------
 
 // Functions to get new point or new time range
@@ -101,18 +126,18 @@ function inputAveragingRange() {
 // Create Panel and define margin widths
 
 // set the dimensions and margins of the graph
-var margin = { top: 30, right: 40, bottom: 60, left: 220 },
-  width = $("#linegraph_mainPanel").width() - margin.left - margin.right,
-  height = $("#linegraph_mainPanel").height() - margin.top - margin.bottom;
+var margin = { top: 30, right: 15, bottom: 60, left: 50 },
+  width = $("#linegraph_graphPanel").width() - margin.left - margin.right,
+  height = $("#linegraph_graphPanel").height() - margin.top - margin.bottom;
 
 
 // append the svg object to the body of the page
-var svgHolder = d3.select("#linegraph_mainPanel")
+var svgHolder = d3.select("#linegraph_graphPanel")
   .append("svg")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
-  .attr("transform","translate(" + ((margin.left)-(0)) + "," + margin.top + ")");
+  .attr("transform", "translate(" + ((margin.left) - (0)) + "," + margin.top + ")");
 
 //---------------------------------------------------------------
 

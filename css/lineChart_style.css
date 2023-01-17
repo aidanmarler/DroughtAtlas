@@ -167,11 +167,10 @@ span em{
 
 #linegraph_infoPanel {
   position: absolute;
-  background-color: rgb(0, 0, 0);
-  width: 14vw;
-  height: 80%;
-  left: 2vh;
-  top: 1vh;
+  width: 16%;
+  height: 100%;
+  left: 1%;
+  top: 0%;
 }
 
 #linegraph_infoPanel_static {
@@ -199,11 +198,10 @@ span em{
 
 #linegraph_graphPanel {
   position: absolute;
-  background-color: rgb(255, 255, 255);
-  width: 14vw;
-  height: 80%;
-  left: 2vh;
-  top: 1vh;
+  width: 83%;
+  height: 100%;
+  right: 0%;
+  top: 0%;
 }
 
 

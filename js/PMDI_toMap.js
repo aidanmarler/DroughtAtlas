@@ -114,9 +114,9 @@ function calcSize(pmdi) {
     var zoomIndex = 1;
 
     if (zoom > 4) {
-        zoomIndex = (zoom * 2) / (7)
+        zoomIndex = (zoom * 2) / (5)
     }
-    var size = 1 * zoomIndex
+    var size = 1.2 * zoomIndex
 
     if (pmdi < 1 && pmdi > -1) {
         size = 2.5 * zoomIndex
