@@ -22,15 +22,15 @@ body {
 }
 
 /* ---CLASSES--- */
-.big {
+.bigText {
     font-size: 150%;
 }
 
 .smallText {
-    font-size: 83%;
+    font-size: 80%;
 }
 
-/* -LINKS- */
+/* -Time and Space text colors- */
 .timeText_dark {
     color: rgb(255, 248, 186);
 }

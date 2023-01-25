@@ -26,7 +26,7 @@
             ?
         </div>
         
-        <p id="Title"> <span><em>Interactive</em></span> <b>L</b>iving <b>B</b>lended <b>D</b>rought <b>A</b>tlas
+        <p id="Title"> <span class="smallText"><em>Interactive</em></span> <b>L</b>iving <b>B</b>lended <b>D</b>rought <b>A</b>tlas
         </p>
     </div>
     <div id="helpWindow_main" class = "helpWindow">
@@ -59,12 +59,12 @@
         </div>
         <!--Timeseries control buttons and inputs-->
         <div id="lineGraphControls">
-            <p style="text-align:left;">Timeseries Map Range</p>
+            <p style="text-align:left; font-size: small;">Timeseries Map Range</p>
             <input id="yearMinInput" placeholder="0" minlength="1" maxlength="4" size="1">
             <input id="yearMaxInput" placeholder="2017" minlength="1" maxlength="4" size="1">
             <button onclick="inputYearRange()" id="timeseriesRangeSubmit">Submit</button>
             </br></br>
-            <p style="text-align:left;">Rolling Average Range (odd number)</p>
+            <p style="text-align:left; font-size: small;">Rolling Average Range (odd number)</p>
             <input id="averagingRangeInput" placeholder="5" minlength="1" maxlength="4" size="1">
             <button onclick="inputAveragingRange()" id="averagingRangeSubmit">Submit</button>
         </div>

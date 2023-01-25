@@ -158,7 +158,7 @@ function callNewChartRollingAverage(average) {
 function setLinegraphTitle() {
 
   //add formatted attribute to panel content string
-  let titleContent = "<span class>Summer PMDI </span><span class = 'timeText_dark'><b>" + yearMin + " - " + yearMax + "</b></span>";
+  let titleContent = "<span class = 'smallText'>Summer PMDI </span><span class = 'timeText_dark'><b>" + yearMin + " - " + yearMax + "</b></span>";
 
   let titleDiv = d3.select("#graphLabel_title")
 

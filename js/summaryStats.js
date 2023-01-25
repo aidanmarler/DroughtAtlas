@@ -56,7 +56,7 @@ function addGeneralStatsLabels() {
     
     statsPanel_labels.innerHTML += "<div class = 'tooltip smallText'>IQR<span class='tooltiptext'>Inter Quartile Range</span></div>" + ":</br>"
 
-    statsPanel_labels.innerHTML += "<div class = 'tooltip smallText'>RMS<span class='tooltiptext'>Root Mean Square</span></div>" + ":</br>"
+    //statsPanel_labels.innerHTML += "<div class = 'tooltip smallText'>RMS<span class='tooltiptext'>Root Mean Square</span></div>" + ":</br>"
     statsPanel_labels.innerHTML += "<div class = 'tooltip smallText'>MAD<span class='tooltiptext'>Mean Absolute Deviation</span></div>" + ":</br>"
 }
 
@@ -76,7 +76,7 @@ function addGeneralStatsValues() {
     // Mean
     statsPanel_values.innerHTML += skewnessVal.toFixed(3) + "</br>"
     statsPanel_values.innerHTML += iqrVal.toFixed(3) + "</br>"
-    statsPanel_values.innerHTML += rmsVal.toFixed(3) + "</br>"
+    //statsPanel_values.innerHTML += rmsVal.toFixed(3) + "</br>"
     statsPanel_values.innerHTML += madVal.toFixed(3) + "</br>"
 }
 

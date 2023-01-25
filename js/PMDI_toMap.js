@@ -311,8 +311,8 @@ function createHeadingContent(year) {
 function updateHeadingContent(header) {
     //add formatted attribute to panel content string
     //document.getElementById("yearHeader").innerHTML = header;
-    document.getElementById("mapYearLabel").innerHTML = "Map Year: <span class = 'timeText'>" + header + "</span>";
-    document.getElementById("mapTitle").innerHTML = "<span>Summer of </span><span class = 'timeText'>" + header + "</span>";
+    document.getElementById("mapYearLabel").innerHTML = "Map Year: <span class = 'timeText_dark'>" + header + "</span>";
+    document.getElementById("mapTitle").innerHTML = "<span class = 'smallText'>Summer of </span><span class = 'timeText_dark'>" + header + "</span>";
     //console.log("Map Year: " + header)
 };
 
