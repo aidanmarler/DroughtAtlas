@@ -16,19 +16,33 @@ helpIcon.addEventListener("click", function () {
         helpIcon.innerHTML = "?"
         helpWindow.style.zIndex = (-2);
         isOpen = false;
-    // If the prompt was closed, open it by changing the icon, 
-    //      moving the promp above the rest of the site, and setting isOpen as true
+        //make yellow
+        helpIcon.style.backgroundColor = "rgb(255, 217, 0)";
+        helpIcon.style.borderColor = "rgb(255, 217, 0)"
+        // If the prompt was closed, open it by changing the icon, 
+        //      moving the promp above the rest of the site, and setting isOpen as true
     } else {
         helpIcon.innerHTML = "X"
         helpWindow.style.zIndex = (9998);
         isOpen = true;
+        //make red
+        helpIcon.style.backgroundColor = "rgb(214, 79, 79)"
+        helpIcon.style.borderColor = "rgb(214, 79, 79)"
     };
 });
 
 // On mouse over, set the icon to reflect that
 helpIcon.addEventListener("mouseover", function () {
-    helpIcon.style.backgroundColor = "rgb(255, 217, 0)";
-    helpIcon.style.borderColor = "rgb(255, 217, 0)"
+    if (isOpen) {
+        //make red
+        helpIcon.style.backgroundColor = "rgb(214, 79, 79)"
+        helpIcon.style.borderColor = "rgb(214, 79, 79)"
+    } else {
+        //make yellow
+        helpIcon.style.backgroundColor = "rgb(255, 217, 0)";
+        helpIcon.style.borderColor = "rgb(255, 217, 0)"
+    }
+
 });
 
 // On mouse out, set the icon back to normal
@@ -46,6 +60,8 @@ helpWindow.innerHTML = "<font size='+3'><b>Exploring the Springs of Northern Neb
 helpWindow.innerHTML += "<br><br> Data was sourced from "
 helpWindow.innerHTML += "<a href='https://www.ncei.noaa.gov/products/paleoclimatology/drought-variability' target='_blank'>NOAA's library of PaleoClimatic data</a>."
 //helpWindow.innerHTML += "The data is specifically the <a href='https://www.ncei.noaa.gov/products/paleoclimatology/drought-variability' target='_blank'> NOAA's library of PaleoClimatic data</a>".
+helpWindow.innerHTML += "<br><br><a href='http://iridl.ldeo.columbia.edu/SOURCES/.LDEO/.TRL/.NADA2004/.pdsi-atlas.html' target='_blank'>North American Drought Atlas</a>."
+
 
 // PCP Instructions
 helpWindow.innerHTML += "<br><br><font size='+2'><b>Parallel Coordinate Plot</b></font"

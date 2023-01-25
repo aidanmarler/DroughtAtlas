@@ -3,14 +3,18 @@
 let yearMin = 0;
 let yearMax = 2017;
 // Minimum Latitude and Longitude/ Maximum Latitude and Longitude
-let latMin = 100;
-let latMax = 100;
+let latMin = 25;
+let latMax = 50;
+let lonMin = -125;
+let lonMax = -66;
 // Point Selected to view the data of
 let pointInView = "2274";
+let pointInView_coordinates = "";
 // Years to use to collect an average around each point
 let averageRange = 101;
 // a global array to store data for the average in
-let averageData = [];
+let temporal_averageData = [];
+let spatial_averageData = [];
 //---------------------------------------------------------------
 
 // MAIN: get data, build initial linechart
@@ -33,32 +37,29 @@ function getPointIndex() {
   })
 }
 
-
-async function data(pathToCsv) {
-  return await d3.csv(pathToCsv, function (data) {
-    console.log("working...")
-    return data
-  })
-};
-
-async function init() {
-  let temp_pointIndex = await data('data/LBDA_main.csv');
-  console.log("done1")
-  let temp_lbda_csv = await data('data/LBDA_pointIndex.csv');
-  console.log("done2")
-  //buildLineChart(lbda_csv);
-  // this should work now assuming you are using d3 function correctly as i'm not aware of d3 functions myself
-  console.log(temp_pointIndex)[get]
-}
-
-//init()
-
-
 // Call these funtions, wait, and then build line chart when done
 getLBDA()
 getPointIndex()
 setTimeout(() => buildLineChart(lbda_csv), 500);
 //setTimeout(() => console.log(pointIndex), 00);
+
+//---------------------------------------------------------------
+
+// Create Panel and define margin widths
+
+// set the dimensions and margins of the graph
+var margin = { top: 30, right: 15, bottom: 60, left: 50 },
+  width = $("#linegraph_graphPanel").width() - margin.left - margin.right,
+  height = $("#linegraph_graphPanel").height() - margin.top - margin.bottom;
+
+
+// append the svg object to the body of the page
+var svgHolder = d3.select("#linegraph_graphPanel")
+  .append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + ((margin.left) - (0)) + "," + margin.top + ")");
 
 //---------------------------------------------------------------
 
@@ -123,25 +124,7 @@ function inputAveragingRange() {
 }
 //---------------------------------------------------------------
 
-// Create Panel and define margin widths
-
-// set the dimensions and margins of the graph
-var margin = { top: 30, right: 15, bottom: 60, left: 50 },
-  width = $("#linegraph_graphPanel").width() - margin.left - margin.right,
-  height = $("#linegraph_graphPanel").height() - margin.top - margin.bottom;
-
-
-// append the svg object to the body of the page
-var svgHolder = d3.select("#linegraph_graphPanel")
-  .append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-  .attr("transform", "translate(" + ((margin.left) - (0)) + "," + margin.top + ")");
-
-//---------------------------------------------------------------
-
-// Set New Line Graph
+// Set New Line Graph on events
 
 // set new point to graph
 function callNewChartPoint(lat, lon) {
@@ -160,7 +143,6 @@ function callNewChartTimeRange(min, max) {
   yearMin = min;
   yearMax = max;
   buildLineChart(lbda_csv);
-  setLinegraphTitle();
 }
 
 // set new range of years to graph
@@ -172,90 +154,18 @@ function callNewChartRollingAverage(average) {
   buildLineChart(lbda_csv);
 }
 
+// sets the linegraph title to match the years shown
 function setLinegraphTitle() {
-  
+
   //add formatted attribute to panel content string
-  let titleContent = "<span>Summer PMDI <b>" + yearMin+ " - " + yearMax+ "</b></span>";
+  let titleContent = "<span class>Summer PMDI </span><span class = 'timeText_dark'><b>" + yearMin + " - " + yearMax + "</b></span>";
 
   let titleDiv = d3.select("#graphLabel_title")
-  
+
   titleDiv.html(titleContent)
- 
+
   return;
 };
-//---------------------------------------------------------------
-
-// Calculate AVERAGE PMDI over X years
-
-// Calculate Average of an array of points given 
-function calculateYearlyAverage(year, range) {
-  // Define local variables
-  let averageValue = 0;
-  let averageList = [];
-  let rangeToAverage = Math.floor(range / 2);
-
-  // add point to average around to list of points to average
-  averageList.push(parseFloat(lbda_csv[year][pointInView]))
-
-  // For each number between 1 and rangeToAverage, get cellValue and add it to list if it is actually a number
-  for (let i = 1; i <= rangeToAverage; i++) {
-    // Define a variable to get the value at each surrounding cell
-    let cellValue;
-
-    // check if year is in range
-    if ((year + i) <= 2017) {
-
-      cellValue = lbda_csv[(year + i)][pointInView]
-      if (cellValue != '') {
-        averageList.push(parseFloat(cellValue))
-      };
-    };
-
-    // check if year is in range
-    if ((year - i) >= 0) {
-      cellValue = lbda_csv[(year - i)][pointInView]
-      if (cellValue != '') {
-        averageList.push(parseFloat(cellValue))
-      };
-    };
-  };
-
-  averageList.forEach((value) => {
-    averageValue += value;
-  })
-
-  averageValue = averageValue / averageList.length;
-  //console.log(year, averageList)
-
-  return [averageValue, averageList.length];
-}
-
-// Calculate the Average for every year in the dataframe.
-function createAverageDatum(data) {
-  //data[year][pointID]
-  //console.log(data[2017][2274])
-  // for year in range, get data[year][pointID], calc avg for that point, and then add it to a datum
-
-  averageData = [];
-
-  // Loop through each row (year) of the data
-  data.forEach(function (d) {
-
-    if ((d[pointInView]) == "") {
-      var yearMean = ["", 0];
-    } else {
-      var yearMean = calculateYearlyAverage(parseInt(d.year), averageRange);
-    };
-
-    // Add the mean to the newData array
-    averageData.push({
-      year: d.year,
-      average: yearMean[0],
-      yearsUsed: yearMean[1]
-    });
-  });
-};
-
 //---------------------------------------------------------------
 
 // 
@@ -263,23 +173,29 @@ function createAverageDatum(data) {
 // append the svg object to the body of the page
 const infoPanel_static = document.getElementById("linegraph_infoPanel_static");
 const infoPanel_dynamic = document.getElementById("linegraph_infoPanel_dynamic");
-let sideColumn = document.createElement("div")
-infoPanel_dynamic.append(sideColumn)
-sideColumn.style = "text-align:right;"
+const infoPanel_dynamic_title = document.getElementById("linegraph_infoPanel_dynamic_title");
+const infoPanel_dynamic_values = document.getElementById("linegraph_infoPanel_dynamic_values");
+const infoPanel_dynamic_labels = document.getElementById("linegraph_infoPanel_dynamic_labels");
 
+// Creates and sets the contents of the static panel by the linegraph
 function setInfoPanelStaticContents() {
-  var contents = "<br/> Point: " + pointIndex[parseFloat(pointInView)]["latitude"] + ", " + pointIndex[parseFloat(pointInView)]["longitude"]
-  contents += "<br/><br/> Time Range: " + yearMin + " - " + yearMax
+  pointInView_coordinates = pointIndex[parseFloat(pointInView)]["latitude"] + ", " + pointIndex[parseFloat(pointInView)]["longitude"]
+  var contents = "<span class = 'spaceText_dark'>" + pointInView_coordinates + "</span>" + "<br/>"
+  contents += "<span class = 'timeText_dark'>" + yearMin + " - " + yearMax + "</span>" + "<br/>"
   infoPanel_static.innerHTML = contents;
 }
 
+// Creates and sets the contents of the dynamic panel by the linegraph
+// what makes it dynamic, as opposed to static, is the fact that it gets updtated based on mouse movement
 function setInfoPanelDynamicContents(year, pmdi, mean) {
   var average = Math.round((mean + Number.EPSILON) * 100) / 100
-  var contents = "<br/> Year: " + "<font size='+0'>" + year + "</font>"
-  contents += "<br/><br/> PMDI: " + "<font size='+0'>" + pmdi + "</font>"
-  contents += "<br/><br/> " + averageRange + " year rolling average: " + "<font size='+0'>" + average + "</font>"
-  infoPanel_dynamic.innerHTML = contents;
-  sideColumn.innerHTML = "hello world"
+  var yearContents = "<span class = 'timeText_dark'><font size='+0'>" + year + " CE</font></span>"
+  var contents = pmdi + "<br/>"//<span class = 'timeText'>"
+  contents += average + "<br/>"//</span>"
+  var labelContents = "PMDI:</br><span class = 'timeText'><font size='-4'>" + averageRange + " y. rolling </font>x̄:</span>"
+  infoPanel_dynamic_title.innerHTML = yearContents;
+  infoPanel_dynamic_values.innerHTML = contents;
+  infoPanel_dynamic_labels.innerHTML = labelContents;
 }
 
 
@@ -294,7 +210,7 @@ function buildLineChart(data) {
   // Filter the data to only show values from the range of years chosen
   var filteredData = data.filter(function (data) {
 
-    if ((data["year"] >= yearMin) && (data["year"] <= yearMax)) {
+    if ((parseInt(data["year"]) >= yearMin) && (parseInt(data["year"]) <= yearMax)) {
       return data;
     }
   })
@@ -343,7 +259,21 @@ function buildLineChart(data) {
   //console.log(strokeWidth)
 
   // Create datum of X year average values from LBDA_csv
-  createAverageDatum(filteredData)
+  createTemporalAverageDatum(filteredData)
+  createSpatialAverageDatum(filteredData)
+
+  // Add the regional average line
+  svgHolder
+    .append("path")
+    .datum(spatial_averageData)
+    .attr("fill", "none")
+    .attr("stroke", "grey")
+    .attr("stroke-opacity", .3)
+    .attr("stroke-width", 1)
+    .attr("d", d3.line()
+      .x(function (d) { return x(d.year) })
+      .y(function (d) { return y(d.average) })
+    )
 
   // Add the main line
   svgHolder
@@ -358,10 +288,10 @@ function buildLineChart(data) {
     )
 
 
-  // Add the other line (yearly average)
+  // Add the temporal average line
   svgHolder
     .append("path")
-    .datum(averageData)
+    .datum(temporal_averageData)
     .attr("fill", "none")
     .attr("stroke", "white")
     .attr("stroke-opacity", .5)
@@ -399,8 +329,8 @@ function buildLineChart(data) {
   var focusTempAverage = svgHolder
     .append('g')
     .append('circle')
-    .style("fill", "white")
-    .attr("stroke", "white")
+    .style("fill", "rgb(255, 246, 162)")
+    .attr("stroke", "rgb(255, 246, 162)")
     .attr("stroke-width", 2)
     .attr("z-index", 100)
     .attr('r', 3)
@@ -436,7 +366,9 @@ function buildLineChart(data) {
     .on('mouseover', mouseover)
     .on('mousemove', mousemove)
     .on('mouseout', mouseout)
-    .on('click', click);
+    .on('mousedown', dragStart)
+    .on('mouseup', dragEnd);
+  //.on('click', click);
 
 
   // What happens when the mouse move -> show the annotations at the right positions.
@@ -456,10 +388,11 @@ function buildLineChart(data) {
   function mousemove() {
     // recover coordinate we need
     var x0 = x.invert(d3.mouse(this)[0]);
-    var mainTracer = bisect(filteredData, x0, 1);
-    var temporalAverageTracer = bisect(averageData, x0, 1);
+    var mainTracer = bisect(filteredData, x0, 0);
+    var temporalAverageTracer = bisect(temporal_averageData, x0, 0);
+    //console.log(filteredData)
     selectedData = filteredData[mainTracer]
-    selectedAverageData = averageData[temporalAverageTracer]
+    selectedAverageData = temporal_averageData[temporalAverageTracer]
     //console.log(selectedAverageData["average"])
     xPos = calcPopupXPos(x(selectedData.year))
     focusMain
@@ -490,10 +423,48 @@ function buildLineChart(data) {
     focusText.style("opacity", 0)
   }
 
-  function click() {
-    lineGraphNewYear(selectedData.year)
-    //console.log(selectedData.year)
+
+  // Drag and Click Interactions
+  let interactionIsClick;
+  let dragStartYear;
+
+  function dragStart() {
+    interactionIsClick = true;
+    dragStartYear = selectedData.year;
+    setTimeout(() => (interactionIsClick = false), 200);
   }
 
-  setInfoPanelStaticContents()
+  function dragEnd() {
+    if (isNaN(dragStartYear)) {
+      return;
+    }
+    if (interactionIsClick) {
+      lineGraphNewYear(selectedData.year);
+      return;
+    }
+    if (dragStartYear === selectedData.year) {
+      lineGraphNewYear(selectedData.year);
+    }
+    else if (parseInt(dragStartYear) > parseInt(selectedData.year)) {
+      callNewChartTimeRange(selectedData.year, dragStartYear)
+      //console.log("B " + selectedData.year)
+    }
+    else {
+      callNewChartTimeRange(dragStartYear, selectedData.year)
+      //console.log("A " + selectedData.year)
+    };
+  }
+
+  setInfoPanelStaticContents();
+  setLinegraphTitle();
+  
+  newData = [];
+  for (let i = 0; i < filteredData.length; i++) {
+    //console.log(filteredData[i]);
+
+  } 
+  //console.log(pointInView)
+  var generalStatsArray = (makeGeneralStatsArray(filteredData));
+  //console.log(generalStatsArray)
+  calcSummaryStatistics(generalStatsArray);
 }

@@ -14,13 +14,7 @@ function createMap() {
         keyboard: false
     });
 
-    /*
     //set tile layer and add to map
-    L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-    })
-    */
-
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
         subdomains: 'abcd',
@@ -30,53 +24,17 @@ function createMap() {
     //call getData function
     getData(map);
 
+    // make headings that use the year shown in map
     var yearHolder = createHeadingContent(2017);
     updateHeadingContent(yearHolder)
 
+    //  Add function so that on zoom the symbols color and size are updated
     map.on('zoomend', function () {
         updatePropSymbols(selectedYear);
     });
 };
 
-/*
-// funciton to calculate min max and mean PMDI over a given time 
-function calcStatsInRange(data, minYear, maxYear) {
-    //create empty array to store all data values
-    var allValues = [];
-    //loop through each city
-
-    for (var point of data.features) {
-        for (let y = minYear; y <= maxYear; y++) {
-            if (point.properties[y] != "NA") {
-                allValues.push(point.properties[y])
-            }
-
-        }
-
-    }
-    //get min, max, mean stats for our array
-    dataStats.min = Math.min(...allValues);
-    dataStats.max = Math.max(...allValues);
-    //calculate meanValue
-    var sum = allValues.reduce(function (a, b) { return a + b; });
-    dataStats.mean = (sum / allValues.length).toFixed(4);
-
-    console.log(dataStats)
-
-    $('#statsPanel').html("<p>Avg: " + dataStats["mean"] + "      Max: " + dataStats["max"] + "      Min: " + dataStats["min"] + "</p>")
-
-}*/
-
-//calculate the radius of each proportional symbol
-function calcPropRadius(attValue) {
-    //constant factor adjusts symbol sizes evenly
-    var minRadius = 5;
-    //Flannery Apperance Compensation formula
-    var radius = 1.0083 * Math.pow(attValue / dataStats["min"], 0.5715) * minRadius
-
-    return radius;
-};
-
+// Function to calculate the dot color given the point value
 function calcColor(pmdi) {
     var color = "white"
 
@@ -108,18 +66,19 @@ function calcColor(pmdi) {
     return color
 }
 
-
+// Funciton to calculate the dot size given value and map zoom level
 function calcSize(pmdi) {
     var zoom = map.getZoom();
     var zoomIndex = 1;
 
     if (zoom > 4) {
-        zoomIndex = (zoom * 2) / (5)
+        zoomIndex = ((zoom * 2) / (5))
     }
     var size = 1.2 * zoomIndex
 
     if (pmdi < 1 && pmdi > -1) {
         size = 2.5 * zoomIndex
+        //console.log(zoomIndex)
     } else if (pmdi >= 1 && pmdi < 2) {
         size = 3 * zoomIndex
     } else if (pmdi <= -1 && pmdi > -2) {
@@ -141,69 +100,62 @@ function calcSize(pmdi) {
     } else if (pmdi <= -6) {
         size = 9 * zoomIndex
     };
-    return size
+    return size;
 }
 
 //function to convert markers to circle markers
 function pointToLayer(feature, latlng, year) {
-    //Determine which attribute to visualize with proportional symbols
-    //var attribute = attributes[0];
-    // check
-    //console.log(attribute);
+    //Create point with specific features
+    function buildPoint() {
+        //create marker options
+        var options = {
+            fillColor: pointColor,
+            color: "white",
+            weight: 0,
+            opacity: 1,
+            fillOpacity: .9
+        };
 
-    //Create Header
-    //var yearHolder = createHeadingContent(attribute);
-    //updateHeadingContent(yearHolder)
-
-    var pointColor = calcColor(feature.properties[selectedYear])
-    var pointRadius = calcSize(feature.properties[selectedYear])
-
-
-    //create marker options
-    var options = {
-        fillColor: pointColor,
-        color: "white",
-        weight: 0,
-        opacity: 1,
-        fillOpacity: .9
-    };
-
-    if ((latlng.lat == pointIndex[pointInView]["latitude"]) && (latlng.lng == pointIndex[pointInView]["longitude"])) {
-        options.weight = 3
-    }
-
-    //For each feature, determine its value for the selected attribute
-    //var attValue = Number(feature.properties[attribute]);
-
-    //Give each feature's circle marker a radius based on its attribute value
-    options.radius = pointRadius //calcPropRadius(attValue);
-
-    //create circle marker layer
-    var layer = L.circleMarker(latlng, options);
-
-    //add formatted attribute to panel content string
-    var popupContent = createPopupContent(feature, year);
-
-    /*
-    //bind the popup to the circle marker    
-    layer.bindPopup(popupContent, {
-        offset: new L.Point(0, -options.radius)
-    });
-    */
-    layer.bindTooltip(popupContent)
-
-
-    layer.on('click', point_clickOn);
-
-    function point_clickOn() {
-        {
-            callNewChartPoint(latlng["lat"], latlng["lng"])
-            updatePropSymbols(selectedYear)
+        // If it is the selected point, then give it a border
+        if ((latlng.lat == pointIndex[pointInView]["latitude"]) && (latlng.lng == pointIndex[pointInView]["longitude"])) {
+            options.weight = 3
         }
-    };
 
-    //return the circle marker to the L.geoJson pointToLayer option
-    return layer;
+        //For each feature, determine its value for the selected attribute
+        //var attValue = Number(feature.properties[attribute]);
+
+        //Give each feature's circle marker a radius based on its attribute value
+        options.radius = pointRadius //calcPropRadius(attValue);
+
+        //create circle marker layer
+        var layer = L.circleMarker(latlng, options);
+
+        //add formatted attribute to panel content string
+        var popupContent = createPopupContent(feature, year);
+
+        // Bind the tooltip to each point
+        layer.bindTooltip(popupContent)
+
+        // Call event on click
+        layer.on('click', point_clickOn);
+
+        // On click, do this
+        function point_clickOn() {
+            {
+                callNewChartPoint(latlng["lat"], latlng["lng"])
+                updatePropSymbols(selectedYear)
+            }
+        };
+
+        //return the circle marker to the L.geoJson pointToLayer option
+        return layer;
+    };
+    var pointColor = calcColor(feature.properties[selectedYear]);
+    var pointRadius = calcSize(feature.properties[selectedYear]);
+    // rest of the code that uses variable1 and variable2
+    var point = buildPoint();
+    //console.log(point)
+    return point
 };
 
 //Add circle markers for point features to the map
@@ -359,8 +311,8 @@ function createHeadingContent(year) {
 function updateHeadingContent(header) {
     //add formatted attribute to panel content string
     //document.getElementById("yearHeader").innerHTML = header;
-    document.getElementById("mapYearLabel").innerHTML = "Map Year: " + header;
-    document.getElementById("mapTitle").innerHTML = "<span>Summer of </span>" + header;
+    document.getElementById("mapYearLabel").innerHTML = "Map Year: <span class = 'timeText'>" + header + "</span>";
+    document.getElementById("mapTitle").innerHTML = "<span>Summer of </span><span class = 'timeText'>" + header + "</span>";
     //console.log("Map Year: " + header)
 };
 
@@ -370,188 +322,40 @@ function updatePropSymbols(year) {
     map.eachLayer(function (layer) {
         //Example 3.18 line 4
         if (layer.feature && layer.feature.properties[year]) {
-            //access feature properties
-            var props = layer.feature;
+            function restylePoint() {
+                //access feature properties
+                var props = layer.feature;
 
-            //update each feature's radius based on new attribute values
-            var radius = calcSize(props.properties[year]);
-            layer.setRadius(radius);
+                //update each feature's radius based on new attribute values
+                var radius = calcSize(props.properties[year]);
+                layer.setRadius(radius);
 
-            var pointColor = calcColor(props.properties[year]);
-            layer.setStyle({ fillColor: pointColor });
-            //layer.setContent(color)
+                var pointColor = calcColor(props.properties[year]);
+                layer.setStyle({ fillColor: pointColor });
+                //layer.setContent(color)
 
-            if ((layer._latlng.lat == pointIndex[pointInView]["latitude"]) && (layer._latlng.lng == pointIndex[pointInView]["longitude"])) {
-                layer.setStyle({ weight: 3 })
-            } else {
-                layer.setStyle({ weight: 0 })
+                if ((layer._latlng.lat == pointIndex[pointInView]["latitude"]) && (layer._latlng.lng == pointIndex[pointInView]["longitude"])) {
+                    layer.setStyle({ weight: 3 })
+                } else {
+                    layer.setStyle({ weight: 0 })
+                }
+
+                //add city to popup content string
+                var popupContent = createPopupContent(props, year);
+
+                layer.bindTooltip(popupContent)
+                //update popup with new content    
+                //popup = layer.getPopup();
+                //popup.setContent(popupContent).update();
             }
-
-            //add city to popup content string
-            var popupContent = createPopupContent(props, year);
-
-            layer.bindTooltip(popupContent)
-            //update popup with new content    
-            //popup = layer.getPopup();
-            //popup.setContent(popupContent).update();
+            restylePoint();
         };
     });
 
     // Update Header
     var yearHolder = createHeadingContent(year);
     updateHeadingContent(yearHolder)
-
-    // Update Legend
-    //updateLegend(year);
-
-    // Update Stats
-    //calcStatsInRange(complete_dataset, selectedYear, selectedYear);
-
-
 };
-
-function getCircleValues(attribute) {
-    //start with min at highest possible and max at lowest possible number
-    var min = Infinity,
-        max = -Infinity;
-
-    map.eachLayer(function (layer) {
-        //get the attribute value
-        if (layer.feature) {
-            var attributeValue = Number(layer.feature.properties[attribute]);
-
-            //test for min
-            if (attributeValue < min) {
-                min = attributeValue;
-            }
-
-            //test for max
-            if (attributeValue > max) {
-                max = attributeValue;
-            }
-        }
-    });
-
-    //set mean
-    var mean = (max + min) / 2;
-
-    //return values as an object
-    return {
-        max: max,
-        mean: mean,
-        min: min,
-    };
-}
-
-// create legend.  make title, circles, and labels
-function createLegend(year) {
-    var LegendControl = L.Control.extend({
-        options: {
-            position: 'bottomright'
-        },
-
-        onAdd: function () {
-            // create the control container with a particular class name
-            var container = L.DomUtil.create('div', 'legend-control-container');
-
-            $(container).append('<div class="temporalLegend"><b>PMDI in <span class="year">1980</span></b></div>');
-
-            // COME BACK TO WHEN DONE
-            //set attribute and call update legend
-            //var attribute = attributes[0]
-            //updateLegend(attribute)
-
-            //Step 1: start attribute legend svg string
-            var svg = '<svg id="attribute-legend" width="160px" height="60px">';
-
-            //array of circle names to base loop on  
-            var circles = ["max", "mean", "min"];
-
-            //Step 2: loop to add each circle and text to svg string  
-            for (var i = 0; i < circles.length; i++) {
-
-                //Step 3: assign the r and cy attributes            
-                var radius = calcPropRadius(dataStats[circles[i]]);
-                var cy = 59 - radius;
-
-                //circle string            
-                svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#F47821" fill-opacity="0.8" stroke="#000000" cx="30"/>';
-
-                //evenly space out labels            
-                var textY = i * 20 + 20;
-
-                //text string            
-                svg += '<text id="' + circles[i] + '-text" x="65" y="' + textY + '">' + Math.round(dataStats[circles[i]] * 100) / 100 + " million" + '</text>';
-            };
-
-            //close svg string
-            svg += "</svg>";
-
-            //add attribute legend svg to container
-            $(container).append(svg);
-
-            return container;
-        }
-    });
-
-    map.addControl(new LegendControl());
-    updateLegend(year);
-};
-
-function updateLegend(year) {
-    //create content for legend
-    var content = "<b>PMDI in " + year + "</b>";
-
-    //replace legend content
-    $(".temporalLegend").html(content);
-    //console.log(content)
-
-
-    //get the max, mean, and min values as an object
-    var circleValues = getCircleValues(attribute);
-
-    for (var key in circleValues) {
-        //get the radius
-        var radius = calcPropRadius(circleValues[key]);
-
-        $("#" + key).attr({
-            cy: 59 - radius,
-            r: radius,
-        });
-
-        $("#" + key + "-text").text(
-            Math.round(circleValues[key] * 100) / 100 + " million"
-        );
-    }
-}
-
-/*
-function processData(data) {
-    //empty array to hold attributes
-    var attributes = [];
- 
-    //properties of the first feature in the dataset
-    var properties = data.features[0].properties;
- 
-    //push each attribute name into attributes array
-    for (var attribute in properties) {
-        //only take attributes with population values
-        if (attribute.indexOf("Pop") > -1) {
-            attributes.push(attribute);
-        };
-    };
- 
-    //check result
-    //console.log(attributes);
- 
-    return attributes;
-};
-*/
-
-//
-function createStatsPanel(response, activeYear, minYear, maxYear, point) {
-    var yearStatsContainer = L.DomUtil.create('div', 'year-stats-container');
-}
 
 //Import GeoJSON data
 function getData(map) {
@@ -572,5 +376,3 @@ function getData(map) {
 };
 
 $(document).ready(createMap);
-
-//console.log(complete_dataset)

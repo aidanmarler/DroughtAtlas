@@ -103,21 +103,6 @@
   padding-bottom: 2%;
 }
 
-span {
-  font-size: 83%;
-}
-
-span em {
-  color: #fff9ce;
-}
-
-
-span b {
-  font-size: 150%;
-  color: white;
-}
-
-
 .helpWindow {
   background-color: rgba(29, 28, 28, 0.811);
   border-color: rgba(228, 228, 228, 0.402);
@@ -156,9 +141,58 @@ span b {
   z-index: 0;
   outline: #000000 solid 3px;
   outline-offset: -1px;
+  letter-spacing: 0.06em;
   text-align: center;
+  font: 14px sans-serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#generalStatsPanel {
+  position: absolute;
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  text-align: center;
+  width: 40%;
+  height: 96%;
+  right: 2%;
+  top: 2%;
+  border-radius: 18px;
+}
+
+#generalStatsPanel_title {
+  position: absolute;
+  text-align: Center;
+  left: 0%;
+  width: 100%;
+  height: 10%;
+  top: 2%;
   font: 17px sans-serif;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  line-height: 1.5;
+}
+
+#generalStatsPanel_labels {
+  position: absolute;
+  text-align: right;
+  left: 0%;
+  width: 52%;
+  height: 82%;
+  bottom: 0%;
+  font: 14px sans-serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  line-height: 1.4;
+}
+
+#generalStatsPanel_values {
+  position: absolute;
+  text-align: left;
+  right: 0%;
+  width: 46%;
+  height: 82%;
+  bottom: 0%;
+  font: 14px sans-serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  line-height: 1.4;
 }
 
 
@@ -175,38 +209,72 @@ span b {
 
 #linegraph_infoPanel {
   position: absolute;
-  width: 16%;
+  width: 13.5%;
   height: 100%;
-  left: 1%;
+  left: .5%;
   top: 0%;
 }
 
 #linegraph_infoPanel_static {
   position: absolute;
-  background-color: rgb(0, 0, 0);
+  /*background-color: rgb(105, 110, 59);*/
   width: 94%;
-  height: 47%;
+  height: 39%;
   left: 3%;
   top: 2%;
-  font: 12px sans-serif;
+  font: 14px sans-serif;
+  text-align: center;
+  letter-spacing: 0.1em;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  line-height: 1.5;
 }
 
 #linegraph_infoPanel_dynamic {
   position: absolute;
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(44, 44, 44);
   width: 94%;
   height: 50%;
   left: 3%;
-  bottom: 2%;
-  font: 12px sans-serif;
-  text-align: left;
+  bottom: 4%;
+  font: 14px sans-serif;
+  text-align: center;
+  letter-spacing: 0.1em;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  border-radius: 15px;
+}
+
+#linegraph_infoPanel_dynamic_title {
+  position: absolute;
+  /*background-color: rgba(20, 191, 68, 0.531);*/
+  top: 5%;
+  width: 100%;
+  font: 12px sans-serif;
+  text-align: center;
+  letter-spacing: 0.1em;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#linegraph_infoPanel_dynamic_labels {
+  position: absolute;
+  width: 58%;
+  height: 70%;
+  left: 0%;
+  bottom: 0%;
+  text-align: right;
+}
+
+#linegraph_infoPanel_dynamic_values {
+  position: absolute;
+  width: 40%;
+  height: 70%;
+  right: 0%;
+  bottom: 0%;
+  text-align: left;
 }
 
 #linegraph_graphPanel {
   position: absolute;
-  width: 83%;
+  width: 86%;
   height: 100%;
   right: 0%;
   top: 0%;
