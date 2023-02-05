@@ -225,7 +225,7 @@ function createSequenceControls(attributes) {
 
         //Step 8: update slider
         $('.range-slider').val(index);
-        selectedYear = index
+        selectedYear = index;
         updatePropSymbols(selectedYear);
 
     });
@@ -234,7 +234,7 @@ function createSequenceControls(attributes) {
     $('.range-slider').on('input', function () {
         var index = $(this).val();
         //console.log(index);
-        selectedYear = index
+        selectedYear = index;
         updatePropSymbols(selectedYear);
 
     });
@@ -246,19 +246,19 @@ document.addEventListener('keydown', function (event) {
     if (event.keyCode == 37) {
         if (selectedYear > 0) {
             year = parseInt(selectedYear) - 1
-            lineGraphNewYear(year)
+            newMapYear(year)
             return
         }
-        lineGraphNewYear(2017)
+        newMapYear(2017)
         return
     }
     else if (event.keyCode == 39) {
         if (parseInt(selectedYear) < 2017) {
             year = parseInt(selectedYear) + 1
-            lineGraphNewYear(year)
+            newMapYear(year)
             return
         }
-        lineGraphNewYear(0)
+        newMapYear(0)
         return
     }
 });
@@ -279,7 +279,7 @@ function inputYear() {
 }
 
 // function to set a new year based on clicking on the linegraph
-function lineGraphNewYear(year) {
+function newMapYear(year) {
     selectedYear = year;
     $('.range-slider').val(year);
     updatePropSymbols(year);
@@ -355,6 +355,7 @@ function updatePropSymbols(year) {
     // Update Header
     var yearHolder = createHeadingContent(year);
     updateHeadingContent(yearHolder)
+    moveToolTipFromMap()
 };
 
 //Import GeoJSON data
@@ -375,4 +376,13 @@ function getData(map) {
     });
 };
 
-$(document).ready(createMap);
+function moveToolTipFromMap() {
+    let selectedData = filteredData[selectedYear]
+    // set the input variables
+    let year = selectedYear
+    let pmdi = selectedData[pointInView]
+    let selectedRollingAverageData = temporal_averageData[selectedYear]
+    let selectedRegionalAverageData = spatial_averageData[selectedYear]
+    // move tooltip with selected variables
+    moveToolTip(year, pmdi, selectedRollingAverageData, selectedRegionalAverageData)
+}

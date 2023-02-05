@@ -6,7 +6,7 @@ function calcSummaryStatistics(array) {
     //modeVal = mode(array)
     medianVal = median(array)
     rmsVal = rootMeanSquare(array)
-    sdVal = standardDeviation(array)
+    sdVal = sampleStandardDeviation(array)
     madVal = medianAbsoluteDeviation(array)
     iqrVal = interquartileRange(array)
     countVal = array.length
@@ -18,25 +18,13 @@ function calcSummaryStatistics(array) {
     addGeneralStatsTitle();
     addGeneralStatsLabels();
     addGeneralStatsValues();
-    console.log("Mean: " + meanVal)
-    console.log("Min: " + minVal)
-    console.log("Max: " + maxVal)
-    //console.log("Mode: " + modeVal)
-    console.log("Median: " + medianVal)
-    console.log("Root Mean Square: " + rmsVal)
-    console.log("Standard Deviation: " + sdVal)
-    console.log("medianAbsoluteDeviation: " + madVal)
-    console.log("IQR: " + iqrVal)
-    console.log("Count: " + countVal)
-    console.log("Nulls: " + nullCountVal)
-    console.log("Skewness: " + skewnessVal)
 }
 
 // Builds the title of the general stats panel
 function addGeneralStatsTitle() {
     const statsPanel_title = document.getElementById("generalStatsPanel_title");
-    statsPanel_title.innerHTML = "<span class = 'spaceText_light'><b>" + pointInView_coordinates + "</b></span>" + "</br>"
-    statsPanel_title.innerHTML += "<span class = 'timeText_light'><b>" + yearMin + " - " + yearMax + " CE</b></span>"
+    statsPanel_title.innerHTML = "<span class = 'timeText_light'><b>" + yearMin + " - " + yearMax + " CE</b></span>" + "</br>"
+    statsPanel_title.innerHTML += "<font size='-0'><span class = 'spaceText_light'><b>" + pointInView_lat + ", " + pointInView_lon + "</b></span></font>"
 }
 
 //builds the label column of the stats panel
@@ -133,14 +121,10 @@ function calculateYearlyAverage(year, range) {
         };
     };
 
-    averageList.forEach((value) => {
-        averageValue += value;
-    })
+    averageValue = mean(averageList)
+    standardDeviationValue = sampleStandardDeviation(averageList)
 
-    averageValue = averageValue / averageList.length;
-    //console.log(year, averageList)
-
-    return [averageValue, averageList.length];
+    return [averageValue, standardDeviationValue, averageList.length];
 }
 
 // Calculate the Average for every year in the dataframe.
@@ -165,7 +149,8 @@ function createTemporalAverageDatum(data) {
         temporal_averageData.push({
             year: d.year,
             average: yearMean[0],
-            yearsUsed: yearMean[1]
+            sd: yearMean[1],
+            yearsUsed: yearMean[2]
         });
     });
 };

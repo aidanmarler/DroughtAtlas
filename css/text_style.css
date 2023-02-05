@@ -14,11 +14,16 @@ span b {
 
 /* ---MAIN--- */
 body {
-    background-color: rgb(57, 52, 48);
-    font: 14px sans-serif;
-    color: #c7c7c7;
+    background-color: rgb(0, 0, 0);
+    font: 14 sans-serif;
+    font-size: 2vmin;
+    color: #bdbdbd;
     font-weight: normal;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+p {
+    color: #bdbdbd;
 }
 
 /* ---CLASSES--- */
@@ -52,6 +57,7 @@ body {
 .tooltip {
     position: relative;
     display: inline-block;
+    cursor: default;
 }
 
 .tooltip .tooltiptext {
@@ -64,16 +70,17 @@ body {
     padding: 2px 0;
     position: absolute;
     z-index: 10;
-    bottom: 100%;
-    right: 0%;
+    bottom: 90%;
+    right: -20%;
     font: 12px sans-serif;
+    font-size: 1.8vmin;
     backdrop-filter: blur(10px);
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     /*margin-left: -60px;*/
 
     /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
     opacity: 0;
-    transition: opacity .7s;
+    transition: opacity .4s;
     pointer-events:none;
 }
 

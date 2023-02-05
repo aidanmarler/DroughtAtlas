@@ -64,3 +64,29 @@
   float: left;
   width: 8%;
 }
+
+/*Map sub-sytles*/
+
+#mapControls {
+  position: absolute;
+  bottom: 5%;
+  left: 5%
+}
+
+#mapTitle {
+  position: absolute;
+  background-color: rgb(0, 0, 0);
+  width: 55%;
+  height: 54%;
+  left: 1%;
+  bottom: 1%;
+  border-radius: 18px;
+  z-index: 0;
+  outline: #000000 solid 3px;
+  outline-offset: -1px;
+  letter-spacing: 0.06em;
+  text-align: center;
+  font: 16px sans-serif;
+  font-size: 2.3vmin;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}

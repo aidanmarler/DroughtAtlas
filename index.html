@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/text_style.css">
     <link rel="stylesheet" href="css/map_style.css">
     <link rel="stylesheet" href="css/lineChart_style.css">
+    <link rel="stylesheet" href="css/helpWindows.css">
     <link rel="stylesheet" href="lib/leaflet.css">
 
 </head>
@@ -22,15 +23,16 @@
     <!--link to data-->
     <div id="referenceLink_div">
         <!--Create divs for a help icon and a help window-->
-        <div id="helpIcon_main" class = "helpIcon">
+        <div id="helpIcon_main" class="helpIcon">
             ?
         </div>
-        
-        <p id="Title"> <span class="smallText"><em>Interactive</em></span> <b>L</b>iving <b>B</b>lended <b>D</b>rought <b>A</b>tlas
+
+        <p id="Title"> <span class="smallText"><em>Interactive</em></span> <b>L</b>iving <b>B</b>lended <b>D</b>rought
+            <b>A</b>tlas
         </p>
     </div>
-    <div id="helpWindow_main" class = "helpWindow">
-        </div>
+    <div id="helpWindow_main" class="helpWindow">
+    </div>
     <!--put your initial page content here-->
     <div id="linegraph_mainPanel">
         <div id="linegraph_graphPanel">
@@ -39,11 +41,16 @@
             <div id="graphLabel_yAxis">PMDI</div>
         </div>
         <div id="linegraph_infoPanel">
-            <div id="linegraph_infoPanel_static"></div>
-            <div id="linegraph_infoPanel_dynamic">
-                <div id="linegraph_infoPanel_dynamic_title"></div>
-                <div id="linegraph_infoPanel_dynamic_labels"></div>
-                <div id="linegraph_infoPanel_dynamic_values"></div>
+            <div id="linegraph_infoPanel_title"></div>
+            <div id="linegraph_infoPanel_rolling">
+                <div id="linegraph_infoPanel_rolling_title"></div>
+                <div id="linegraph_infoPanel_rolling_labels"></div>
+                <div id="linegraph_infoPanel_rolling_values"></div>
+            </div>
+            <div id="linegraph_infoPanel_region">
+                <div id="linegraph_infoPanel_region_title"></div>
+                <div id="linegraph_infoPanel_region_labels"></div>
+                <div id="linegraph_infoPanel_region_values"></div>
             </div>
         </div>
     </div>
@@ -84,8 +91,11 @@
     <script type="text/javascript" src="lib/simple-statistics.js"></script>
     <script type="text/javascript" src="js/PMDI_toMap.js"></script>
     <script type="text/javascript" src="js/PMDI_lineChart.js"></script>
+    <script type="text/javascript" src="js/lineGraph_buildingBlocks.js"></script>
+    <script type="text/javascript" src="js/buildLineGraph.js"></script>
     <script type="text/javascript" src="js/helpPrompt.js"></script>
     <script type="text/javascript" src="js/summaryStats.js"></script>
+    <script type="text/javascript" src="js/_main.js"></script>
 
 </body>
 

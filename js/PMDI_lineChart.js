@@ -1,29 +1,34 @@
+"use strict";
+
 //Create variables that will be editable on the site
 // Minimum Year and Max Year
 let yearMin = 0;
 let yearMax = 2017;
 // Minimum Latitude and Longitude/ Maximum Latitude and Longitude
-let latMin = 25;
-let latMax = 50;
-let lonMin = -125;
-let lonMax = -66;
+let latMin = 25.01;
+let latMax = 50.01;
+let lonMin = -125.01;
+let lonMax = -66.01;
 // Point Selected to view the data of
 let pointInView = "2274";
-let pointInView_coordinates = "";
+// the selected points latitiude and longitude
+let pointInView_lat = 42.75;
+let pointInView_lon = -98.25;
 // Years to use to collect an average around each point
 let averageRange = 101;
-// a global array to store data for the average in
+// a global array to store data for the averages in
 let temporal_averageData = [];
 let spatial_averageData = [];
 //---------------------------------------------------------------
 
-// MAIN: get data, build initial linechart
+// get data--funcitons are called by "main"
 
 //Creat Variables to hold the datasets
 let lbda_csv;
 let pointIndex;
 
 
+// READ ME: this is all d3 v4.  v5 is promise based.  download v5, save as d3v5, and make these functions with that instead
 // Store PMDI csv
 function getLBDA() {
   d3.csv("data/LBDA_main.csv", function (data) {
@@ -37,12 +42,6 @@ function getPointIndex() {
   })
 }
 
-// Call these funtions, wait, and then build line chart when done
-getLBDA()
-getPointIndex()
-setTimeout(() => buildLineChart(lbda_csv), 500);
-//setTimeout(() => console.log(pointIndex), 00);
-
 //---------------------------------------------------------------
 
 // Create Panel and define margin widths
@@ -53,6 +52,7 @@ var margin = { top: 30, right: 15, bottom: 60, left: 50 },
   height = $("#linegraph_graphPanel").height() - margin.top - margin.bottom;
 
 
+// everything in this is the actual linegraph
 // append the svg object to the body of the page
 var svgHolder = d3.select("#linegraph_graphPanel")
   .append("svg")
@@ -67,12 +67,17 @@ var svgHolder = d3.select("#linegraph_graphPanel")
 
 // On click a new point, find lat and long in the pointIndex CSV and set new pointInView from index value
 function setPointInView(lat, lon) {
+  // itterate through the pointIndex csv; save the index of the point that matches
   for (let i = 0; i < pointIndex.length; i++) {
     if ((lat == pointIndex[i]["latitude"]) && (lon == pointIndex[i]["longitude"])) {
+      // using the points lat and long, get the point in view and save it
       pointInView = (pointIndex[i]["index"])
-      //console.log(pointInView)
+      // save the lat and lon to be displayed 
+      pointInView_lat = lat
+      pointInView_lon = lon
       return
     }
+    //return
   }
 }
 
@@ -81,7 +86,7 @@ function inputYearRange() {
   // Store the inputs into variables
   var inputMin = parseInt(document.getElementById("yearMinInput").value);
   var inputMax = parseInt(document.getElementById("yearMaxInput").value);
-  // Fail if string is max is less than min
+  // Fail if string is max is less than mino
   if (inputMin >= inputMax) {
     alert("Minimum year must be less than Maximum year.")
     return
@@ -159,7 +164,7 @@ function setLinegraphTitle() {
 
   //add formatted attribute to panel content string
   let titleContent = "<span class = 'smallText'>Summer PMDI </span><span class = 'timeText_dark'><b>" + yearMin + " - " + yearMax + "</b></span>";
-
+  
   let titleDiv = d3.select("#graphLabel_title")
 
   titleDiv.html(titleContent)
@@ -170,301 +175,173 @@ function setLinegraphTitle() {
 
 // 
 
-// append the svg object to the body of the page
-const infoPanel_static = document.getElementById("linegraph_infoPanel_static");
-const infoPanel_dynamic = document.getElementById("linegraph_infoPanel_dynamic");
-const infoPanel_dynamic_title = document.getElementById("linegraph_infoPanel_dynamic_title");
-const infoPanel_dynamic_values = document.getElementById("linegraph_infoPanel_dynamic_values");
-const infoPanel_dynamic_labels = document.getElementById("linegraph_infoPanel_dynamic_labels");
-
-// Creates and sets the contents of the static panel by the linegraph
-function setInfoPanelStaticContents() {
-  pointInView_coordinates = pointIndex[parseFloat(pointInView)]["latitude"] + ", " + pointIndex[parseFloat(pointInView)]["longitude"]
-  var contents = "<span class = 'spaceText_dark'>" + pointInView_coordinates + "</span>" + "<br/>"
-  contents += "<span class = 'timeText_dark'>" + yearMin + " - " + yearMax + "</span>" + "<br/>"
-  infoPanel_static.innerHTML = contents;
-}
-
 // Creates and sets the contents of the dynamic panel by the linegraph
 // what makes it dynamic, as opposed to static, is the fact that it gets updtated based on mouse movement
-function setInfoPanelDynamicContents(year, pmdi, mean) {
-  var average = Math.round((mean + Number.EPSILON) * 100) / 100
-  var yearContents = "<span class = 'timeText_dark'><font size='+0'>" + year + " CE</font></span>"
-  var contents = pmdi + "<br/>"//<span class = 'timeText'>"
-  contents += average + "<br/>"//</span>"
-  var labelContents = "PMDI:</br><span class = 'timeText'><font size='-4'>" + averageRange + " y. rolling </font>x̄:</span>"
-  infoPanel_dynamic_title.innerHTML = yearContents;
-  infoPanel_dynamic_values.innerHTML = contents;
-  infoPanel_dynamic_labels.innerHTML = labelContents;
+function setInfoPanelDynamicContents(year, pmdi, rollingData, rollingSelected) {
+  // change title conents
+  setInfoPanelTitleContents(year, pmdi);
+  // change rolling contents
+  setInfoPanelRollingContents(rollingData, true);
+  // change regional contents
+  setInfoPanelRegionalContents(rollingData, true);
 }
 
+// Sets the title Contents for the linegraph stats panel.
+function setInfoPanelTitleContents(year, pmdi) {
+  // get and save te html id as variable
+  const linegraph_infoPanel_title = document.getElementById("linegraph_infoPanel_title");
+  // Create HTML contents of the panel
+  let titleContents = "<span class = 'timeText_dark'><b><font size='+0'>" + year + "</b></font> CE</span>"
+  if (pmdi == "") {
+    pmdi = "N/A"
+  }
+  titleContents += "<br/>PMDI: <b><font size='+0'>" + pmdi + "</font></b>"
+  // Assign contents to the saved panel
+  linegraph_infoPanel_title.innerHTML = titleContents;
+}
+
+function setInfoPanelRollingContents(rollingData, rollingSelected) {
+  // Get and save the panels to interact with.
+  const linegraph_infoPanel_rolling = document.getElementById("linegraph_infoPanel_rolling");
+  const linegraph_infoPanel_rolling_title = document.getElementById("linegraph_infoPanel_rolling_title");
+  const linegraph_infoPanel_rolling_labels = document.getElementById("linegraph_infoPanel_rolling_labels");
+  const linegraph_infoPanel_rolling_values = document.getElementById("linegraph_infoPanel_rolling_values");
+
+  let rollingAverage = Math.round((rollingData["average"] + Number.EPSILON) * 100) / 100
+  if (rollingData["average"] == 0) {
+    rollingAverage = "N/A"
+  }
+
+  let rollingSD = Math.round((rollingData["sd"] + Number.EPSILON) * 100) / 100
+  if (rollingData["sd"] == 0) {
+    rollingSD = "N/A"
+  }
+
+  let rollingCount = rollingData["yearsUsed"]
+  if (rollingData["yearsUsed"] == undefined) {
+    rollingCount = "N/A"
+  }
+
+  let shade = "dark"
+  if (rollingSelected) {
+    shade = "light"
+  }
+
+  let labelContents = "Lat:<br/>"
+  labelContents += "Lon:<br/>"
+
+  labelContents += averageRange + " y. x̄:<br/>"
+  labelContents += averageRange + " y. s:<br/>"
+  labelContents += "Count:<br/>"
+
+  let valuesContents = "<b>" + pointInView_lat + "</b><br/>"
+  valuesContents += "<b>" + pointInView_lon + "</b><br/>"
+  valuesContents += "<b>" + rollingAverage + "</b><br/>"
+  valuesContents += "<b>" + rollingSD + "</b><br/>"
+  valuesContents += "<b>" + rollingCount + "</b>"
+
+  linegraph_infoPanel_rolling_labels.innerHTML = labelContents;
+  linegraph_infoPanel_rolling_values.innerHTML = valuesContents;
+}
+
+function setInfoPanelRegionalContents(regionData, rollingSelected) {
+  // Get and save the panels to interact with.
+  const linegraph_infoPanel_region = document.getElementById("linegraph_infoPanel_region");
+  const linegraph_infoPanel_region_title = document.getElementById("linegraph_infoPanel_region_title");
+  const linegraph_infoPanel_region_labels = document.getElementById("linegraph_infoPanel_region_labels");
+  const linegraph_infoPanel_region_values = document.getElementById("linegraph_infoPanel_region_values");
+
+  /*
+  let rollingAverage = Math.round((regionData["average"] + Number.EPSILON) * 100) / 100
+  if (regionData["average"] == 0) {
+    rollingAverage = "N/A"
+  }
+
+  let rollingSD = Math.round((regionData["sd"] + Number.EPSILON) * 100) / 100
+  if (regionData["sd"] == 0) {
+    rollingSD = "N/A"
+  }
+
+  let rollingCount = regionData["pointsUsed"]
+  if (regionData["pointsUsed"] == undefined) {
+    rollingCount = "N/A"
+  }
+
+  let shade = "dark"
+  if (rollingSelected) {
+    shade = "light"
+  }
+  */
+
+  let titleContents = "Lat: <b>" + latMin + "</b> to <b>"
+  titleContents += latMax + "</b><br/>"
+  titleContents += "Lon: <b>" + lonMin + "</b> to <b>"
+  titleContents += lonMax + "</b><br/>"
+
+  /*
+  let labelContents = "y. x̄:<br/>"
+  labelContents += " y. s:<br/>"
+  labelContents += "Count:<br/>"
+
+  let valuesContents = "<b>" + pointInView_lat + "</b><br/>"
+  valuesContents += "<b>" + pointInView_lon + "</b><br/>"
+  valuesContents += "<b>" + rollingAverage + "</b><br/>"
+  valuesContents += "<b>" + rollingSD + "</b><br/>"
+  valuesContents += "<b>" + rollingCount + "</b>" */
+
+  linegraph_infoPanel_region_title.innerHTML = titleContents;
+}
+
+document.getElementById("linegraph_infoPanel_rolling").addEventListener("click", function () { changeActiveAverageFunction(true) });
+document.getElementById("linegraph_infoPanel_region").addEventListener("click", function () { changeActiveAverageFunction(false) });
+
+function changeActiveAverageFunction(rollingSelected) {
+  const rolling = document.getElementById("linegraph_infoPanel_rolling");
+  const regional = document.getElementById("linegraph_infoPanel_region");
+  const light = "rgb(150, 150, 150)"
+  const dark = "rgb(20,20,20)"
+
+
+  if (rollingSelected) {
+    // selected
+    rolling.style.backgroundColor = "white"
+    rolling.style.color = "black"
+    rollingLineColor = "white"
+    rollingLineOpacity = .5
+    rollingFocusOpacity = .9
+    // not selected
+    regional.style.backgroundColor = dark
+    regional.style.color = light
+    regionalLineColor = "grey"
+    regionalLineOpacity = .2
+    regionalFocusOpacity = 0
+  } else {
+    // not selected
+    rolling.style.backgroundColor = dark
+    rolling.style.color = light
+    rollingLineColor = "grey"
+    rollingLineOpacity = .2
+    rollingFocusOpacity = 0
+    // selected
+    regional.style.backgroundColor = "white"
+    regional.style.color = "black"
+    regionalLineColor = "white"
+    regionalLineOpacity = .6
+    regionalFocusOpacity = .9
+  }
+  svgHolder.html("");
+  buildLineChart(lbda_csv)
+};
+
+
+let rollingLineColor = "white"
+let regionalLineColor = "grey"
+let rollingLineOpacity = .5
+let regionalLineOpacity = .2
+let rollingFocusOpacity = .8
+let regionalFocusOpacity = 0
 
 //---------------------------------------------------------------
 
-// FINAL Build the line chart, call all necessary functions
-
-//Read the PMDI data
-//d3.csv("data/LBDA_main.csv", function (data) {
-function buildLineChart(data) {
-  //console.log(lbda_csv[1000][2274])
-  // Filter the data to only show values from the range of years chosen
-  var filteredData = data.filter(function (data) {
-
-    if ((parseInt(data["year"]) >= yearMin) && (parseInt(data["year"]) <= yearMax)) {
-      return data;
-    }
-  })
-
-  // Add X axis --> it is a date format
-  var x = d3.scaleLinear()
-    .domain([yearMin, yearMax])
-    .range([0, width]);
-  svgHolder.append("g")
-    .attr("class", "axisWhite")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x));
-
-  // Add Y axis
-  var y = d3.scaleLinear()
-    .domain([-8, 8])
-    .range([height, 0]);
-  svgHolder.append("g")
-    .attr("class", "axisWhite")
-    .call(d3.axisLeft(y));
-
-  // This allows to find the closest X index of the mouse:
-  var bisect = d3.bisector(function (d) { return d.year; }).left;
-
-  // Set the gradient
-  svgHolder.append("linearGradient")
-    .attr("id", "line-gradient")
-    .attr("gradientUnits", "userSpaceOnUse")
-    .attr("x1", 0)
-    .attr("y1", y(-6))
-    .attr("x2", 0)
-    .attr("y2", y(6))
-    .selectAll("stop")
-    .data([
-      { offset: "0%", color: "#BD7F16" },
-      { offset: "50%", color: "#b3b3b3" },
-      { offset: "100%", color: "#2684B6" }
-    ])
-    .enter().append("stop")
-    .attr("offset", function (d) { return d.offset; })
-    .attr("stop-color", function (d) { return d.color; });
 
 
-  // Determine main line stroke width depending on how many years are in view
-  var strokeWidth = ((100 / ((yearMax - yearMin))) + .5)
-  //console.log(strokeWidth)
-
-  // Create datum of X year average values from LBDA_csv
-  createTemporalAverageDatum(filteredData)
-  createSpatialAverageDatum(filteredData)
-
-  // Add the regional average line
-  svgHolder
-    .append("path")
-    .datum(spatial_averageData)
-    .attr("fill", "none")
-    .attr("stroke", "grey")
-    .attr("stroke-opacity", .3)
-    .attr("stroke-width", 1)
-    .attr("d", d3.line()
-      .x(function (d) { return x(d.year) })
-      .y(function (d) { return y(d.average) })
-    )
-
-  // Add the main line
-  svgHolder
-    .append("path")
-    .datum(filteredData)
-    .attr("fill", "none")
-    .attr("stroke", "url(#line-gradient)")
-    .attr("stroke-width", strokeWidth)
-    .attr("d", d3.line()
-      .x(function (d) { return x(d.year) })
-      .y(function (d) { return y(d[pointInView]) })
-    )
-
-
-  // Add the temporal average line
-  svgHolder
-    .append("path")
-    .datum(temporal_averageData)
-    .attr("fill", "none")
-    .attr("stroke", "white")
-    .attr("stroke-opacity", .5)
-    .attr("stroke-width", 3)
-    .attr("d", d3.line()
-      .x(function (d) { return x(d.year) })
-      .y(function (d) { return y(d.average) })
-    )
-
-  var referenceLine0 = svgHolder
-    .append('g')
-    .append('line')
-    .style("fill", "grey")
-    .attr("stroke", "grey")
-    .attr("stroke-width", 1)
-    .attr("z-index", 0)
-    .style("opacity", .5)
-    .attr("x1", x(yearMin))
-    .attr("x2", x(yearMax))
-    .attr("y1", y(0))
-    .attr("y2", y(0))
-
-  // Create the circle that travels along the curve of chart
-  var focusMain = svgHolder
-    .append('g')
-    .append('circle')
-    .style("fill", "none")
-    .attr("stroke", "white")
-    .attr("stroke-width", 2)
-    .attr("z-index", 100)
-    .attr('r', 6)
-    .style("opacity", 0)
-
-  // Create the circle that travels along the curve of chart
-  var focusTempAverage = svgHolder
-    .append('g')
-    .append('circle')
-    .style("fill", "rgb(255, 246, 162)")
-    .attr("stroke", "rgb(255, 246, 162)")
-    .attr("stroke-width", 2)
-    .attr("z-index", 100)
-    .attr('r', 3)
-    .style("opacity", 0)
-
-  // Create the circle that travels along the curve of chart
-  var focusYearLine = svgHolder
-    .append('g')
-    .append('line')
-    .attr("stroke", "white")
-    .attr("stroke-width", strokeWidth)
-    .attr("z-index", 0)
-    //.attr('r', 6)
-    .style("opacity", 0)
-
-  // Create the text that travels along the curve of chart
-  var focusText = svgHolder
-    .append('g')
-    .append('text')
-    //.append('rectangle')
-    .style("opacity", 0)
-    .style("fill", "white")
-    .attr("text-anchor", "left")
-    .attr("alignment-baseline", "middle")
-
-  // Create a rect on top of the svg area: this rectangle recovers mouse position
-  svgHolder
-    .append('rect')
-    .style("fill", "none")
-    .style("pointer-events", "all")
-    .attr('width', width)
-    .attr('height', height)
-    .on('mouseover', mouseover)
-    .on('mousemove', mousemove)
-    .on('mouseout', mouseout)
-    .on('mousedown', dragStart)
-    .on('mouseup', dragEnd);
-  //.on('click', click);
-
-
-  // What happens when the mouse move -> show the annotations at the right positions.
-  function mouseover() {
-    focusMain.style("opacity", .9)
-    focusTempAverage.style("opacity", .9)
-    focusText.style("opacity", 0)
-    focusYearLine.style("opacity", .5)
-  }
-
-  // Calculate where to put the popup
-  function calcPopupXPos(x) {
-    return (-100 * (x / width)) + 15
-  }
-
-  // When the mouse is moved over the visualization, activate the popup 
-  function mousemove() {
-    // recover coordinate we need
-    var x0 = x.invert(d3.mouse(this)[0]);
-    var mainTracer = bisect(filteredData, x0, 0);
-    var temporalAverageTracer = bisect(temporal_averageData, x0, 0);
-    //console.log(filteredData)
-    selectedData = filteredData[mainTracer]
-    selectedAverageData = temporal_averageData[temporalAverageTracer]
-    //console.log(selectedAverageData["average"])
-    xPos = calcPopupXPos(x(selectedData.year))
-    focusMain
-      .attr("cx", x(selectedData.year))
-      .attr("cy", y(selectedData[pointInView]))
-    focusTempAverage
-      .attr("cx", x(selectedData.year))
-      .attr("cy", y(selectedAverageData["average"]))
-    focusYearLine
-      .attr("x1", x(selectedData.year))
-      .attr("x2", x(selectedData.year))
-      .attr("y1", y(8))
-      .attr("y2", y(-8))
-    focusText
-      .html("x:" + selectedData.year + "  -  " + "y:" + selectedData[pointInView])
-      .attr("x", x(selectedData.year) + xPos)
-      .attr("y", y(selectedData[pointInView]) - 14)
-    // Set dynamic info contents
-    setInfoPanelDynamicContents(selectedData.year, selectedData[pointInView], selectedAverageData["average"])
-  }
-
-  // When mouse leaves the visualization, remove the popup
-  function mouseout() {
-    // Set popup circle and text opacity to 0
-    focusMain.style("opacity", 0)
-    focusTempAverage.style("opacity", 0)
-    focusYearLine.style("opacity", 0)
-    focusText.style("opacity", 0)
-  }
-
-
-  // Drag and Click Interactions
-  let interactionIsClick;
-  let dragStartYear;
-
-  function dragStart() {
-    interactionIsClick = true;
-    dragStartYear = selectedData.year;
-    setTimeout(() => (interactionIsClick = false), 200);
-  }
-
-  function dragEnd() {
-    if (isNaN(dragStartYear)) {
-      return;
-    }
-    if (interactionIsClick) {
-      lineGraphNewYear(selectedData.year);
-      return;
-    }
-    if (dragStartYear === selectedData.year) {
-      lineGraphNewYear(selectedData.year);
-    }
-    else if (parseInt(dragStartYear) > parseInt(selectedData.year)) {
-      callNewChartTimeRange(selectedData.year, dragStartYear)
-      //console.log("B " + selectedData.year)
-    }
-    else {
-      callNewChartTimeRange(dragStartYear, selectedData.year)
-      //console.log("A " + selectedData.year)
-    };
-  }
-
-  setInfoPanelStaticContents();
-  setLinegraphTitle();
-  
-  newData = [];
-  for (let i = 0; i < filteredData.length; i++) {
-    //console.log(filteredData[i]);
-
-  } 
-  //console.log(pointInView)
-  var generalStatsArray = (makeGeneralStatsArray(filteredData));
-  //console.log(generalStatsArray)
-  calcSummaryStatistics(generalStatsArray);
-}
