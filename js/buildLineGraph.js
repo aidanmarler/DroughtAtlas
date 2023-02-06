@@ -5,10 +5,13 @@ let focusRollingAverage;
 let focusRegionalAverage;
 let focusYearLine;
 let filteredData;
+let selectedData;
 
 //Read the PMDI data
 //d3.csv("data/LBDA_main.csv", function (data) {
 function buildLineChart(data) {
+
+    
 
     //----- DEFINE LOCAL FUNCTIONS -----
 
@@ -122,7 +125,7 @@ function buildLineChart(data) {
     // Determine main line stroke width depending on how many years are in view
     let strokeWidth = ((100 / ((yearMax - yearMin))) + .5)
 
-    let selectedData;
+
 
     // Drag and Click Interactions
     let interactionIsClick;
