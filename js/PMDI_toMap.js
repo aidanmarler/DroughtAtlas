@@ -113,7 +113,8 @@ function pointToLayer(feature, latlng, year) {
             color: "white",
             weight: 0,
             opacity: 1,
-            fillOpacity: .9
+            fillOpacity: .9,
+            TransitionEvent: 1
         };
 
         // If it is the selected point, then give it a border

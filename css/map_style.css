@@ -22,14 +22,19 @@
 .range-slider {
   width: 220px;
   height: 5px;
+  cursor: grab;
 }
 
+.range-slider:active{
+  cursor: grabbing;
+}
 
 .step {
   position: relative;
   width: 60px;
   height: 200%;
   top: -5px;
+  cursor: pointer;
 }
 
 
