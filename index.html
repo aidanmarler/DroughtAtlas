@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <title>Drought Atlas</title>
+    <title>Interactive Drought Atlas</title>
 
     <!--put your external stylesheet links here-->
     <link rel="stylesheet" href="css/text_style.css">
@@ -60,20 +60,20 @@
     <div id="controls">
         <!--Map control buttons and inputs-->
         <div id="mapControls">
-            <p id="mapYearLabel" style="text-align:left;">Map Year</p>
-            <input id="yearMapInput" placeholder="2017" minlength="1" maxlength="4" size="1">
-            <button onclick="inputYear()" id="mapYearSubmit">Submit</button>
+            <p id="mapYearLabel">Map Year</p>
+            <input id="yearMapInput" class = "textInput" placeholder="2017" minlength="1" maxlength="4" size="1">
+            <button onclick="inputYear()" class = "submit" id="mapYearSubmit">Submit</button>
         </div>
         <!--Timeseries control buttons and inputs-->
         <div id="lineGraphControls">
-            <p style="text-align:left; font-size: small;">Timeseries Map Range</p>
-            <input id="yearMinInput" placeholder="0" minlength="1" maxlength="4" size="1">
-            <input id="yearMaxInput" placeholder="2017" minlength="1" maxlength="4" size="1">
-            <button onclick="inputYearRange()" id="timeseriesRangeSubmit">Submit</button>
+            <p style="font-size: small;">Timeseries Map Range</p>
+            <input class = "textInput" id="yearMinInput" placeholder="0" minlength="1" maxlength="4" size="1">
+            <input class = "textInput" id="yearMaxInput" placeholder="2017" minlength="1" maxlength="4" size="1">
+            <button class = "submit" onclick="inputYearRange()"  id="timeseriesRangeSubmit">Submit</button>
             </br></br>
-            <p style="text-align:left; font-size: small;">Rolling Average Range (odd number)</p>
-            <input id="averagingRangeInput" placeholder="5" minlength="1" maxlength="4" size="1">
-            <button onclick="inputAveragingRange()" id="averagingRangeSubmit">Submit</button>
+            <p style="font-size: small;">Rolling Average Range (odd number)</p>
+            <input class = "textInput" id="averagingRangeInput" placeholder="5" minlength="1" maxlength="4" size="1">
+            <button class = "submit" onclick="inputAveragingRange()" id="averagingRangeSubmit">Submit</button>
         </div>
         <div id="generalStatsPanel">
             <div id="generalStatsPanel_title"></div>
