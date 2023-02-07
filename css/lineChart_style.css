@@ -67,8 +67,8 @@
 
 #generalStatsPanel {
   position: absolute;
-  background-color: rgb(255, 255, 255);
-  color: rgb(0, 0, 0);
+  background-color: rgb(20, 20, 20);
+  color: rgb(255, 255, 255);
   text-align: center;
   width: 35%;
   height: 96%;
@@ -146,7 +146,7 @@
   left: 2%;
   top: 1%;
   font: 14px sans-serif;
-  font-size: 2.1vmin;
+  font-size: 2vmin;
   text-align: center;
   letter-spacing: 0.1em;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;

@@ -28,11 +28,15 @@ p {
 
 /* ---CLASSES--- */
 .bigText {
-    font-size: 150%;
+    font-size: 125%;
 }
 
 .smallText {
     font-size: 80%;
+}
+
+.greyText {
+    color: #bdbdbd;
 }
 
 /* -Time and Space text colors- */

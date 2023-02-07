@@ -191,11 +191,11 @@ function setInfoPanelTitleContents(year, pmdi) {
   // get and save te html id as variable
   const linegraph_infoPanel_title = document.getElementById("linegraph_infoPanel_title");
   // Create HTML contents of the panel
-  let titleContents = "<span class = 'timeText_dark'><b><font size='+0'>" + year + "</b></font> CE</span>"
+  let titleContents = "<span class = 'timeText_dark bigText'><b>" + year + "</span></b><span class = 'timeText_dark'> CE</span>"
   if (pmdi == "") {
     pmdi = "N/A"
   }
-  titleContents += "<br/>PMDI: <b><font size='+0'>" + pmdi + "</font></b>"
+  titleContents += "<br/>PMDI: <b><span class = 'bigText'>" + pmdi + "</b></span>"
   // Assign contents to the saved panel
   linegraph_infoPanel_title.innerHTML = titleContents;
 }

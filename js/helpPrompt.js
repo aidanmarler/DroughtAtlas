@@ -60,22 +60,28 @@ function helpWindowMain() {
 
     // Add text to fill the help prompt here!
     // Title
-    helpWindowContent = "<b><em><font size='5vmin'>Interactive</em></font> <font size='6vmin'>Living Blended Drought Atlas</b></font>" 
-    helpWindowContent += "<br><br><br>THIS SITE IS CURRENTLY IN DEVELOPMENT--I apologize for any bugs encountered.<br>"
+    helpWindowContent = "<b><em><font size='5vmin'>Interactive</em></font> <font size='5.7vmin'>Living Blended Drought Atlas</b></font>" 
+    helpWindowContent += "<br><br><br> <b>THIS SITE IS CURRENTLY IN DEVELOPMENT</b> - I apologize for any bugs encountered.<br><a href='mailto:aidanmarler1@gmail.com' target='_blank'>Any feedback</a> would be greatly appreciated!"+"<br><br><br><br>"
 
     // Main Help
     //helpWindowContent += "<b><font size='4vmin'>Intent</font></b>"
-    helpWindowContent += "<br>PMDI stands for Palmer's Modified Drought Index." + "</br>"
-    helpWindowContent += "+ Positive values represent wetter conditions.</br> - Negative values represent drier conditions." + "</br></br>"
-    helpWindowContent += "From 2017 to 1979, PMDI was calculated using temperature and precipitation. </br> From 1978 to 0 CE (1 BC), PMDI is estimated by tree-ring thickness." + "</br>"
-    helpWindowContent += "All calculations and estimations are of summertime drought (June-August)." + "</br>"
+    helpWindowContent += "<br></span>PMDI<span class = 'greyText'> stands for </span>Palmer's Modified Drought Index<span class = 'greyText'>." + "</br>"
+    helpWindowContent += "+ Positive + values represent wetter conditions.</br> - Negative - values represent drier conditions." + "</br></br>"
+    helpWindowContent += "From <span class = 'timeText_dark'>1979</span> to <span class = 'timeText_dark'>2017 CE</span>,</span> PMDI <span class = 'greyText'> is calculated using temperature and precipitation. </br>"
+    helpWindowContent += "Every year before that (<span class = 'timeText_dark'>0</span> to <span class = 'timeText_dark'>1978 CE</span>), </span> PMDI <span class = 'greyText'> is estimated by tree-ring thickness." + "</br>"
+    helpWindowContent += "All calculations and estimations are of summertime drought (<span class = 'timeText_dark'>June-August</span>)." + "</br>"
+
+    // !! ADD Biliography HERE !!
+    //helpWindowContent += "To learn more check out these papers:"
+
 
     // Further help, link the video
-    helpWindowContent += "<br><br><br><br> This data comes from NOAA's "
-    helpWindowContent += "<a href='https://www.ncei.noaa.gov/access/paleo-search/study/22454' target='_blank'>Living Blended Drought Atlas v2</a>."
-    helpWindowContent += "<br><br> The <a href='http://iridl.ldeo.columbia.edu/SOURCES/.LDEO/.TRL/.NADA2004/.pdsi-atlas.html' target='_blank'>North American Drought Atlas</a>"
+    helpWindowContent += "</span><br><br><br><br> This data comes from NOAA's "
+    helpWindowContent += "<font size='4vmin'><a href='https://www.ncei.noaa.gov/access/paleo-search/study/22454' target='_blank'>Living Blended Drought Atlas v2</a>.</font>"
+    helpWindowContent += "<font size='2vmin'><br>The <a href='http://iridl.ldeo.columbia.edu/SOURCES/.LDEO/.TRL/.NADA2004/.pdsi-atlas.html' target='_blank'>North American Drought Atlas</a>"
     helpWindowContent += " inspired this visualization." + "<br><br>"
-    helpWindowContent += "<font size='-1'> <i>For more assitance with the application, email me at <a href='mailto:aidanmarler1@gmail.com' target='_blank'>aidanmarler1@gmail.com</a>.</font>"
-    helpWindowContent += "<font size='-1'><br> We used the following plugins: <a href='https://d3js.org/' target='_blank'>D3</a>, <a href='https://leafletjs.com/' target='_blank'>Leaflet</a>.</font>"
+    helpWindowContent += "<i>For assitance, comments, or questions, email me at <a href='mailto:aidanmarler1@gmail.com' target='_blank'>aidanmarler1@gmail.com</a>."
+    helpWindowContent += "<br> The following plugins are used: <a href='https://d3js.org/' target='_blank'>D3</a>, <a href='https://leafletjs.com/' target='_blank'>Leaflet</a>." + "</br></br>"
+    helpWindowContent += "And thank you to the teams of researches who have collected, analyzed, and shared this data!"+"</font>"
     // Data Used and further resources, link the data used (geology, topography, soils)
 }

@@ -1,12 +1,13 @@
 .helpIcon {
     position: absolute;
     text-align: center;
-    width: 13px;
-    height: 13px;
+    width: 2vmin;
+    height: 2vmin;
     background-color: rgb(255, 255, 255);
     border: medium solid rgba(255, 255, 255, 0.693);
     color: black;
     font: 15px sans-serif;
+    font-size: 2.2vmin;
     font-weight: Bold;
     line-height: 87%;
     z-index: 9999;
@@ -17,8 +18,8 @@
   }
   
   #helpIcon_main {
-    top: 14%;
-    left: .4%;
+    top: .6vh;
+    left: .5vw;
   }
   
   #helpWindow_main {

@@ -23,8 +23,8 @@ function calcSummaryStatistics(array) {
 // Builds the title of the general stats panel
 function addGeneralStatsTitle() {
     const statsPanel_title = document.getElementById("generalStatsPanel_title");
-    statsPanel_title.innerHTML = "<span class = 'timeText_light'><b>" + yearMin + " - " + yearMax + " CE</b></span>" + "</br>"
-    statsPanel_title.innerHTML += "<font size='-0'><span class = 'spaceText_light'><b>" + pointInView_lat + ", " + pointInView_lon + "</b></span></font>"
+    statsPanel_title.innerHTML = "<span class = 'timeText_dark'><b>" + yearMin + " - " + yearMax + " CE</b></span>" + "</br>"
+    statsPanel_title.innerHTML += "<span class = 'spaceText_dark smallText'><b>" + pointInView_lat + ", " + pointInView_lon + "</b></span>"
 }
 
 //builds the label column of the stats panel
