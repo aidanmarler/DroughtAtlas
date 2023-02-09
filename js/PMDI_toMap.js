@@ -356,7 +356,7 @@ function updatePropSymbols(year) {
     // Update Header
     var yearHolder = createHeadingContent(year);
     updateHeadingContent(yearHolder)
-    moveToolTipFromMap()
+    resetToolTipPosition();
 };
 
 //Import GeoJSON data
@@ -376,14 +376,3 @@ function getData(map) {
         }
     });
 };
-
-function moveToolTipFromMap() {
-    let selectedData = filteredData[selectedYear]
-    // set the input variables
-    let year = selectedYear
-    let pmdi = selectedData[pointInView]
-    let selectedRollingAverageData = temporal_averageData[selectedYear]
-    let selectedRegionalAverageData = spatial_averageData[selectedYear]
-    // move tooltip with selected variables
-    moveToolTip(year, pmdi, selectedRollingAverageData, selectedRegionalAverageData)
-}

@@ -88,6 +88,9 @@ function makeGeneralStatsArray(data) {
     return (generalStatsArray)
 }
 
+
+//---------------------------------------------------------------
+
 // Calculate Average of an array of points given 
 function calculateYearlyAverage(year, range) {
     // Define local variables
@@ -129,9 +132,8 @@ function calculateYearlyAverage(year, range) {
 
 // Calculate the Average for every year in the dataframe.
 function createTemporalAverageDatum(data) {
-    //data[year][pointID]
-    //console.log(data[2017][2274])
-    // for year in range, get data[year][pointID], calc avg for that point, and then add it to a datum
+
+    return new Promise((resolve, reject) => {
 
     temporal_averageData = [];
 
@@ -153,41 +155,65 @@ function createTemporalAverageDatum(data) {
             yearsUsed: yearMean[2]
         });
     });
+
+    resolve(temporal_averageData)})
 };
-
-function calculateRegionalAverage(data) {
-    let averageValue = 0;
-    let averageList = [];
-
-    for (const property in data) {
-        if ((property != "year") && (data[property] != "")) {
-            averageList.push(parseFloat(data[property]))
-        }
-    }
-
-    averageList.forEach((value) => {
-        averageValue += value;
-    })
-
-    averageValue = averageValue / averageList.length;
-    //console.log(year, averageList)
-
-    return [averageValue, averageList.length];
-}
 
 //---------------------------------------------------------------
 
+// function that calculates regional stats a given year
+function calculateRegionalStats(data) {
+    // Define variables
+
+    // this array holds the list of numbers used to average
+    let valueArray = [];
+    // this counts the null values found in the dataset
+    let nullCounter = 0;
+    // averageValue and standardDev are to hold the calculated values and push them into this years array of info
+    let averageValue;
+    let standardDev;
+
+    // For each property in the data,
+    for (const property in data) {
+        // if the point is empty, add to the null counter
+        if (data[property] == "") {
+            nullCounter += 1;
+        // so long as the value is not "year", append it to our array of numbers to average
+        } else if (property != "year") {
+            valueArray.push(parseFloat(data[property]));
+        }
+    }
+
+    // If 0 numbers have been added to our array, set AVG and SD as NA
+    if (valueArray.length == 0) {
+        averageValue = "NA"
+        standardDev = "NA"
+    } else {
+        // Otherwise, calculate the AVG and SD
+        averageValue = mean(valueArray)
+        standardDev = sampleStandardDeviation(valueArray)
+    }
+
+    // Return this list of information about the year
+    return [averageValue, standardDev, valueArray.length, nullCounter];
+}
+
+// function to calculate stats year by year of the selected region
 function createSpatialAverageDatum(data) {
+    // reset array that holds data to 0
     spatial_averageData = [];
+    // for each line of the data...
     data.forEach(function (d) {
-        let regionalMean = calculateRegionalAverage(d);
+        // console.log(d)
+        // get a variable called regionalStats that used the data from that year
+        let regionalMean = calculateRegionalStats(d);
+        // Add to the array.  Push the Year, Average, Standard Deviation, and PointsUsed (points not used?)
         spatial_averageData.push({
             year: d.year,
             average: regionalMean[0],
-            pointsUsed: regionalMean[1],
+            standardDev: regionalMean[1],
+            pointsUsed: regionalMean[2],
+            nulls: regionalMean[3]
         })
     })
-    //console.log(spatial_averageData)
 }
-
-//calcSummaryStatistics ([1, 2, 3, 4, 5, 6])

@@ -5,10 +5,10 @@
 let yearMin = 0;
 let yearMax = 2017;
 // Minimum Latitude and Longitude/ Maximum Latitude and Longitude
-let latMin = 25.01;
-let latMax = 50.01;
-let lonMin = -125.01;
-let lonMax = -66.01;
+let latMin = 39;
+let latMax = 40;
+let lonMin = -100;
+let lonMax = -70;
 // Point Selected to view the data of
 let pointInView = "2274";
 // the selected points latitiude and longitude
@@ -44,22 +44,68 @@ function getPointIndex() {
 
 //---------------------------------------------------------------
 
-// Create Panel and define margin widths
+// when you click the rolling panel, call changeActiveAverageFunction(true)
+document.getElementById("linegraph_infoPanel_rolling").addEventListener("click", function () { changeActiveAverageFunction(true) });
+// when you click the regional panel, call changeActiveAverageFunction(false)
+document.getElementById("linegraph_infoPanel_region").addEventListener("click", function () { changeActiveAverageFunction(false) });
 
-// set the dimensions and margins of the graph
-var margin = { top: 30, right: 15, bottom: 60, left: 50 },
-  width = $("#linegraph_graphPanel").width() - margin.left - margin.right,
-  height = $("#linegraph_graphPanel").height() - margin.top - margin.bottom;
+function changeActiveAverageFunction(rollingSelected) {
+  const rolling = document.getElementById("linegraph_infoPanel_rolling");
+  const regional = document.getElementById("linegraph_infoPanel_region");
+  const light = "rgb(150, 150, 150)"
+  const dark = "rgb(20,20,20)"
+  let temporal_color
+  let temporal_opacity
+  let temporal_focus_opacity
+  let regional_color
+  let regional_opacity
+  let regional_focus_opacity
+
+  if (rollingSelected) {
+    // ROLLING ACTIVE
+    temporal_color = "white"
+    temporal_opacity = .7
+    temporal_focus_opacity = .9
+    rolling.style.backgroundColor = "white"
+    rolling.style.color = "black"
+    // REGIONAL NOT ACTIVE
+    regional_color = "white"
+    regional_opacity = .1
+    regional_focus_opacity = 0
+    regional.style.backgroundColor = dark
+    regional.style.color = light
+  } else {
+    // ROLLING ACTIVE
+    temporal_color = "white"
+    temporal_opacity = 0
+    temporal_focus_opacity = 0
+    rolling.style.backgroundColor = dark
+    rolling.style.color = light
+    // REGIONAL ACTIVE
+    regional_color = "white"
+    regional_opacity = .7
+    regional_focus_opacity = 1
+    regional.style.backgroundColor = "white"
+    regional.style.color = "black"
+  }
+
+  // set temporal colors
+  line_temporal
+    .attr("stroke", temporal_color)
+    .attr("stroke-opacity", temporal_opacity)
+  focusRollingAverage
+    .style("opacity", temporal_focus_opacity)
+  // set regional colors
+  line_regional
+    .attr("stroke", regional_color)
+    .attr("stroke-opacity", regional_opacity)
+  focusRegionalAverage
+    .style("opacity", regional_focus_opacity)
 
 
-// everything in this is the actual linegraph
-// append the svg object to the body of the page
-var svgHolder = d3.select("#linegraph_graphPanel")
-  .append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-  .attr("transform", "translate(" + ((margin.left) - (0)) + "," + margin.top + ")");
+  addEventListener('mouseover', (event) => { });
+
+}
 
 //---------------------------------------------------------------
 
@@ -127,53 +173,9 @@ function inputAveragingRange() {
   alert("Input must be a number.")
   return
 }
+
+
 //---------------------------------------------------------------
-
-// Set New Line Graph on events
-
-// set new point to graph
-function callNewChartPoint(lat, lon) {
-  // Select the container element for the graph
-  // Remove the existing svg element
-  svgHolder.html("");
-  setPointInView(lat, lon);
-  buildLineChart(lbda_csv);
-}
-
-// set new range of years to graph
-function callNewChartTimeRange(min, max) {
-  // Select the container element for the graph
-  // Remove the existing svg element
-  svgHolder.html("");
-  yearMin = min;
-  yearMax = max;
-  buildLineChart(lbda_csv);
-}
-
-// set new range of years to graph
-function callNewChartRollingAverage(average) {
-  // Select the container element for the graph
-  // Remove the existing svg element
-  svgHolder.html("");
-  averageRange = average;
-  buildLineChart(lbda_csv);
-}
-
-// sets the linegraph title to match the years shown
-function setLinegraphTitle() {
-
-  //add formatted attribute to panel content string
-  let titleContent = "<span class = 'smallText'>Summer PMDI </span><span class = 'timeText_dark'><b>" + yearMin + " - " + yearMax + "</b></span>";
-  
-  let titleDiv = d3.select("#graphLabel_title")
-
-  titleDiv.html(titleContent)
-
-  return;
-};
-//---------------------------------------------------------------
-
-// 
 
 // Creates and sets the contents of the dynamic panel by the linegraph
 // what makes it dynamic, as opposed to static, is the fact that it gets updtated based on mouse movement
@@ -256,17 +258,17 @@ function setInfoPanelRegionalContents(regionData, rollingSelected) {
   if (regionData["average"] == 0) {
     rollingAverage = "N/A"
   }
-
+ 
   let rollingSD = Math.round((regionData["sd"] + Number.EPSILON) * 100) / 100
   if (regionData["sd"] == 0) {
     rollingSD = "N/A"
   }
-
+ 
   let rollingCount = regionData["pointsUsed"]
   if (regionData["pointsUsed"] == undefined) {
     rollingCount = "N/A"
   }
-
+ 
   let shade = "dark"
   if (rollingSelected) {
     shade = "light"
@@ -282,7 +284,7 @@ function setInfoPanelRegionalContents(regionData, rollingSelected) {
   let labelContents = "y. x̄:<br/>"
   labelContents += " y. s:<br/>"
   labelContents += "Count:<br/>"
-
+ 
   let valuesContents = "<b>" + pointInView_lat + "</b><br/>"
   valuesContents += "<b>" + pointInView_lon + "</b><br/>"
   valuesContents += "<b>" + rollingAverage + "</b><br/>"
@@ -292,46 +294,9 @@ function setInfoPanelRegionalContents(regionData, rollingSelected) {
   linegraph_infoPanel_region_title.innerHTML = titleContents;
 }
 
-document.getElementById("linegraph_infoPanel_rolling").addEventListener("click", function () { changeActiveAverageFunction(true) });
-document.getElementById("linegraph_infoPanel_region").addEventListener("click", function () { changeActiveAverageFunction(false) });
-
-function changeActiveAverageFunction(rollingSelected) {
-  const rolling = document.getElementById("linegraph_infoPanel_rolling");
-  const regional = document.getElementById("linegraph_infoPanel_region");
-  const light = "rgb(150, 150, 150)"
-  const dark = "rgb(20,20,20)"
 
 
-  if (rollingSelected) {
-    // selected
-    rolling.style.backgroundColor = "white"
-    rolling.style.color = "black"
-    rollingLineColor = "white"
-    rollingLineOpacity = .5
-    rollingFocusOpacity = .9
-    // not selected
-    regional.style.backgroundColor = dark
-    regional.style.color = light
-    regionalLineColor = "grey"
-    regionalLineOpacity = .2
-    regionalFocusOpacity = 0
-  } else {
-    // not selected
-    rolling.style.backgroundColor = dark
-    rolling.style.color = light
-    rollingLineColor = "grey"
-    rollingLineOpacity = .2
-    rollingFocusOpacity = 0
-    // selected
-    regional.style.backgroundColor = "white"
-    regional.style.color = "black"
-    regionalLineColor = "white"
-    regionalLineOpacity = .6
-    regionalFocusOpacity = .9
-  }
-  svgHolder.html("");
-  buildLineChart(lbda_csv)
-};
+
 
 
 let rollingLineColor = "white"

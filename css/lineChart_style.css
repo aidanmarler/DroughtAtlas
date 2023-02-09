@@ -152,24 +152,32 @@
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   line-height: 1.5;
   border-radius: 14px;
-  color:rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
 }
 
 #linegraph_infoPanel_rolling {
   position: absolute;
   background-color: rgb(250, 250, 250);
-  color:rgb(0, 0, 0);
+  color: rgb(0, 0, 0);
   width: 96%;
   height: 38%;
   left: 2%;
   bottom: 40%;
   border-radius: 14px;
-  transition: background-color .2s;
+  transition: .1s;
   cursor: pointer;
   font: 12px sans-serif;
   font-size: 1.85vmin;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   line-height: 1.2;
+}
+
+#linegraph_infoPanel_rolling:hover {
+  outline:rgb(203, 197, 85);
+  outline-style: solid;
+  outline-width: .5vmin;
+  outline-offset: -.1vmin;
+  z-index: 2;
 }
 
 #linegraph_infoPanel_rolling_title {
@@ -201,10 +209,19 @@
   text-align: left;
 }
 
+#linegraph_infoPanel_region:hover {
+  outline:rgb(122, 187, 111);
+  outline-style: solid;
+  outline-width: .5vmin;
+  outline-offset: -.1vmin;
+  z-index: 2;
+}
+
 #linegraph_infoPanel_region {
   position: absolute;
   background-color: rgb(20, 20, 20);
-  color:rgb(200, 200, 200);
+  color: rgb(200, 200, 200);
+  transition: .1s;
   width: 96%;
   height: 38%;
   left: 2%;

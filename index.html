@@ -85,16 +85,21 @@
     <!-- Load d3.js -->
     <script src="https://d3js.org/d3.v4.js"></script>
 
-    <!--put your external script links here-->
+    <!--External Script Links: -->
+    <!--leaflet-->
     <script type="text/javascript" src="lib/leaflet.js"></script>
     <script type="text/javascript" src="lib/leaflet-providers.js"></script>
     <script type="text/javascript" src="lib/jquery-3.6.1.js"></script>
+    <!--this is to solve an error that arrises where "exports is not defined" modules like commonJS or something would also fix it, but this was easier and I think less costly-->
+    <script>var exports = {};</script>
+    <!--simple statistics-->
     <script type="text/javascript" src="lib/simple-statistics.js"></script>
+    <!--in house JS files-->
     <script type="text/javascript" src="js/main.js"></script>
     <script type="text/javascript" src="js/PMDI_toMap.js"></script>
     <script type="text/javascript" src="js/PMDI_lineChart.js"></script>
     <script type="text/javascript" src="js/lineGraph_buildingBlocks.js"></script>
-    <script type="text/javascript" src="js/buildLineGraph.js"></script>
+    <script type="text/javascript" src="js/lineGraph_construct.js"></script>
     <script type="text/javascript" src="js/helpPrompt.js"></script>
     <script type="text/javascript" src="js/summaryStats.js"></script>
     
